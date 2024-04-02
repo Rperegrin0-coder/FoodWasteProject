@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Discounted Food Listings</title>
+</head>
+<body>
+    <h1>Discounted Food Listings</h1>
+    <ul>
+        {% for listing in listings %}
+        <li>{{ listing.name }} - {{ listing.discounted_price }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
