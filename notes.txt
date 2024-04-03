@@ -1,0 +1,40 @@
+{% for listing in listings %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 position-relative">
+                <!-- Star rating -->
+                <div class="card-header">
+                    <!-- Assuming 'rating' is out of 5 and available in your listing data -->
+                    {% for star in range(listing.rating) %}
+                    <span class="fa fa-star checked"></span>
+                    {% endfor %}
+                    {% for star in range(5-listing.rating) %}
+                    <span class="fa fa-star"></span>
+                    {% endfor %}
+                </div>
+
+                <!-- Image -->
+                <img src="{{ listing.image_url | default('https://via.placeholder.com/150') }}" class="card-img-top" alt="Food Image">
+
+                <!-- Mystery Bags Left Badge -->
+                <span class="badge badge-warning position-absolute" style="top: 10px; right: 10px;">
+                    {{ listing.mystery_bags_left }} Bags Left
+                </span>
+
+                <!-- Favorite Heart -->
+                <a href="#" class="position-absolute" style="top: 10px; left: 10px;" onclick="addToFavorites('{{ listing.name }}'); return false;">
+                    <i class="fa fa-heart-o" aria-hidden="true"></i>
+                </a>
+
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ listing.name }}</h5>
+                    <p class="card-text">{{ listing.description }}</p>
+                    <ul class="list-unstyled mt-auto">
+                        <li class="card-text mb-2">Original Price: <del>${{ listing.original_price }}</del></li>
+                        <li class="card-text mb-2">Discounted Price: <strong>${{ listing.discounted_price }}</strong></li>
+                        <li class="card-text mb-3">Pickup Time: {{ listing.pickup_time }}</li>
+                    </ul>
+                    <a href="#" class="btn btn-success mt-auto">Purchase</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}

@@ -82,37 +82,47 @@ def discounts():
          'original_price': '20.00',
          'discounted_price': '10.00',
          'pickup_time': '5 PM - 6 PM',
-         'image_url': url_for('static', filename='coffee.jpg')
+         'image_url': url_for('static', filename='coffee.jpg'),
+         'rating': 5
          },
         {'name': 'Green Grocers', 'description': 'Vegetable surprise pack', 'original_price': '15.00',
          'discounted_price': '7.50', 'pickup_time': '6 PM - 7 PM',
-         'image_url': url_for('static', filename='retailer1.jpg')
+         'image_url': url_for('static', filename='retailer1.jpg'),
+         'rating': 5
 
          },
         {'name': 'Mama’s Pizzeria', 'description': 'Mystery pizza combo', 'original_price': '25.00',
          'discounted_price': '12.50', 'pickup_time': '8 PM - 9 PM',
-         'image_url': url_for('static', filename='Pizza.jpg')
+         'image_url': url_for('static', filename='Pizza.jpg'),
+         'rating': 5
 
          },
         {'name': 'The Soup Kitchen', 'description': 'Homestyle soup selection', 'original_price': '18.00',
          'discounted_price': '9.00', 'pickup_time': '2 PM - 3 PM',
-         'image_url': url_for('static', filename='soup.webp')
+         'image_url': url_for('static', filename='soup.webp'),
+         'rating': 5
 
          },
         {'name': 'Bread and Butter', 'description': 'Artisan bread basket', 'original_price': '12.00',
          'discounted_price': '6.00', 'pickup_time': '10 AM - 11 AM',
-        'image_url': url_for('static', filename='bread.jpg')
+        'image_url': url_for('static', filename='bread.jpg'),
+         'rating': 5
          },
         {'name': 'Sweet Tooth', 'description': 'Assorted cupcakes and sweets', 'original_price': '22.00',
-         'discounted_price': '11.00', 'pickup_time': '3 PM - 4 PM'},
+         'discounted_price': '11.00', 'pickup_time': '3 PM - 4 PM',
+         'rating': 5},
         {'name': 'Daily Deli', 'description': 'Deli sandwich platter', 'original_price': '30.00',
-         'discounted_price': '15.00', 'pickup_time': '1 PM - 2 PM'},
+         'discounted_price': '15.00', 'pickup_time': '1 PM - 2 PM',
+         'rating': 5},
         {'name': 'Healthy Habits', 'description': 'Mixed fruit and veggie crate', 'original_price': '20.00',
-         'discounted_price': '10.00', 'pickup_time': '9 AM - 10 AM'},
+         'discounted_price': '10.00', 'pickup_time': '9 AM - 10 AM',
+         'rating': 5},
         {'name': 'Grill Masters', 'description': 'BBQ family pack', 'original_price': '45.00',
-         'discounted_price': '22.50', 'pickup_time': '7 PM - 8 PM'},
+         'discounted_price': '22.50', 'pickup_time': '7 PM - 8 PM',
+         'rating': 5},
         {'name': 'Ocean Bites', 'description': 'Seafood sampler', 'original_price': '50.00',
-         'discounted_price': '25.00', 'pickup_time': '6 PM - 7 PM'}
+         'discounted_price': '25.00', 'pickup_time': '6 PM - 7 PM',
+         'rating': 5}
         # Continue adding more listings as necessary
     ]
 

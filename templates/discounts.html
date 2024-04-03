@@ -5,7 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Discounts - GreenGrain</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='discounts.css') }}">
+    <!-- Font Awesome for star and heart icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+
+<body>
+    <!-- Navigation Bar from welcome page --><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Discounts - GreenGrain</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='discounts.css') }}"> <!-- This line links to your external stylesheet -->
+    <!-- Font Awesome for star and heart icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
 </head>
 
 <body>
@@ -131,27 +148,74 @@
     </div>
         <div class="row">
             <!-- Listings loop -->
-            {% for listing in listings %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <img src="{{ listing.image_url | default('https://via.placeholder.com/150') }}" class="card-img-top" alt="Food Image">
-                    <div class="card-body d-flex flex-column">
+        {% for listing in listings %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 position-relative">
+                <!-- Star rating -->
+                <div class="card-header">
+                    <!-- Assuming 'rating' is out of 5 and available in your listing data -->
+                    {% for star in range(listing.rating) %}
+                    <span class="fa fa-star checked"></span>
+                    {% endfor %}
+                    {% for star in range(5-listing.rating) %}
+                    <span class="fa fa-star"></span>
+                    {% endfor %}
+                </div>
+
+                <!-- Image -->
+                <img src="{{ listing.image_url | default('https://via.placeholder.com/150') }}" class="card-img-top" alt="Food Image">
+
+                <!-- Mystery Bags Left Badge -->
+                <span class="badge badge-warning position-absolute" style="top: 10px; right: 10px;">
+                    {{ listing.mystery_bags_left }} Bags Left
+                </span>
+
+                <div class="card-body d-flex flex-column">
+                    <!-- Listing Title and Favorite Icon -->
+                    <div class="d-flex justify-content-between align-items-start">
                         <h5 class="card-title">{{ listing.name }}</h5>
-                        <p class="card-text">{{ listing.description }}</p>
-                        <ul class="list-unstyled mt-auto">
-                            <li class="card-text mb-2">Original Price: <del>${{ listing.original_price }}</del></li>
-                            <li class="card-text mb-2">Discounted Price: <strong>${{ listing.discounted_price }}</strong></li>
-                            <li class="card-text mb-3">Pickup Time: {{ listing.pickup_time }}</li>
-                        </ul>
-                        <a href="#" class="btn btn-success mt-auto">Purchase</a>
+                        <a href="#" onclick="toggleFavorite(this); return false;" class="favorite-icon">
+                            <i class="fa fa-heart-o" aria-hidden="true"></i>
+                        </a>
                     </div>
+
+                    <p class="card-text">{{ listing.description }}</p>
+                    <ul class="list-unstyled mt-auto">
+                        <li class="card-text mb-2">Original Price: <del>${{ listing.original_price }}</del></li>
+                        <li class="card-text mb-2">Discounted Price: <strong>${{ listing.discounted_price }}</strong></li>
+                        <li class="card-text mb-3">Pickup Time: {{ listing.pickup_time }}</li>
+                    </ul>
+                    <a href="#" class="btn btn-success mt-auto">Purchase</a>
                 </div>
             </div>
-            {% endfor %}
+        </div>
+        {% endfor %}
+
+
         </div>
     </div> <!-- Closing tag for 'content-area' div -->
 
-    <!-- Content for discounts page goes here -->
+    <!-- JavaScript to handle adding to favorites -->
+    <script>
+    function addToFavorites(listingName) {
+        console.log("Adding to favorites:", listingName);
+        // Add logic to handle adding to favorites, such as sending an AJAX request to your server
+    }
+
+    function toggleFavorite(element) {
+    // Check if the class list contains 'fa-heart-o' to determine if it's not favorited
+    if (element.querySelector('i').classList.contains('fa-heart-o')) {
+        // It's not favorited, add the 'fa-heart' class and remove the 'fa-heart-o' class
+        element.querySelector('i').classList.add('fa-heart');
+        element.querySelector('i').classList.remove('fa-heart-o');
+    } else {
+        // It's already favorited, remove the 'fa-heart' class and add the 'fa-heart-o' class
+        element.querySelector('i').classList.add('fa-heart-o');
+        element.querySelector('i').classList.remove('fa-heart');
+    }
+    // Here you would also add your code to handle the server-side logic, e.g., AJAX request
+    }
+    </script>
 
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -159,3 +223,4 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+

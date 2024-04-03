@@ -10,11 +10,21 @@
             background-color: #E8F5E9; /* Light green background for a fresh, sustainable look */
             color: #343a40; /* Soft black color for text for better readability */
         }
+        /* Navigation Bar */
         .navbar {
-            background-color: #000000; /* Black background for the navbar */
+            background-color: #004d40; /* A deeper shade for a more professional appearance */
+            border-bottom: 3px solid #00251a; /* A subtle border to enhance the navbar */
         }
-        .navbar-dark .navbar-brand, .navbar-dark .nav-link {
-            color: #ffffff; /* White color for text to ensure readability against the black navbar */
+
+        .navbar-dark .navbar-brand,
+        .navbar-dark .nav-link {
+            color: #ffffff;
+            transition: color 0.3s ease; /* Smooth transition for hover effects */
+        }
+
+        .navbar-dark .navbar-brand:hover,
+        .navbar-dark .nav-link:hover {
+            color: #adebad; /* A lighter green for hover states */
         }
         .btn-custom {
             background-color: #4CAF50; /* Green button for actions that match the sustainability theme */

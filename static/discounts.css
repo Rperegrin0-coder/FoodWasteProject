@@ -1,6 +1,6 @@
 /* General styles */
 body {
-    background-color: #F7F7F7;
+    background-color: #f5f1ed;
     color: #343a40;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* A more modern font */
 }
@@ -25,7 +25,7 @@ body {
 /* Sidebar Filter Styles */
 /* Sidebar filter styles */
 .filter-sidebar {
-    background-color: #ffffff; /* A clean white background for contrast */
+    background-color: #9db89b; /* A clean white background for contrast */
     padding: 20px;
     border-radius: 8px; /* Softly rounded corners */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* A light shadow for depth */
@@ -125,3 +125,36 @@ body {
     padding: .375rem .75rem; /* Adjust padding to make buttons smaller */
     font-size: 0.8rem; /* Match text size of card */
 }
+
+
+/* Default color for the non-favorited heart */
+.fa-heart-o {
+    color: #d3d3d3; /* Light grey color, you can change it as needed */
+}
+
+/* Color for the favorited heart */
+.fa-heart {
+    color: #ff0000; /* Red color for the filled heart */
+}
+
+
+
+
+
+
+
+
+.checked {
+    color: orange;
+}
+
+.fa-heart-o {
+    color: #d9534f; /* Heart color */
+    font-size: 24px; /* Adjust size as needed */
+}
+
+.badge-warning {
+    font-size: 14px; /* Adjust size as needed */
+}
+
+
