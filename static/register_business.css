@@ -1,0 +1,14 @@
+/* In your styles.css file */
+#register-business-section {
+    background-size: cover;
+    background-position: center;
+    padding: 100px 0; /* Adjust padding as needed */
+    text-align: center; /* Center the text */
+}
+
+/* Style for the custom button */
+.btn-custom {
+    background-color: #4CAF50; /* Your theme's button color */
+    color: #ffffff;
+    /* ... Other styles for the button ... */
+}

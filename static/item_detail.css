@@ -1,0 +1,115 @@
+.navbar {
+  margin-bottom: 0; /* This ensures there's no space between the nav bar and the image container */
+}
+
+/* Position the image container directly below the nav bar */
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 400px; /* Or whatever fixed height you prefer */
+  overflow: hidden; /* This can clip off any overflow content */
+  top: 0; /* Ensures there's no gap between the nav bar and the image container */
+}
+
+.full-width-image {
+  width: 100%;
+  height: 100%; /* Full height to fill the container */
+  object-fit: cover; /* Covers the container, cropping the image as necessary without distorting it */
+  border-radius: 0; /* Removes any rounded corners if previously set */
+}
+/* Center the text and make the image details section look polished */
+.image-details {
+  text-align: center; /* Center align the text */
+  background: #fff; /* White background */
+  padding: 20px; /* Padding inside the details section */
+  margin: auto; /* Center the block horizontally */
+  margin-top: -50px; /* Pull the details section up over the image */
+  max-width: 75%; /* Maximum width of the details section */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+  position: relative; /* To stack on top of the image if needed */
+  border-radius: 4px; /* Optional: if you want rounded corners */
+  top: 20px; /* Adjust based on your design preference */
+  transform: translateY(-50%); /* Center the details vertically */
+  z-index: 10; /* Ensure it's above other elements */
+}
+
+/* Style adjustments for h2 and p elements within .image-details for better appearance */
+.image-details h2 {
+  font-size: 2em; /* Larger font size for the title */
+  margin-bottom: 0.5em; /* Space below the title */
+  font-weight: 600; /* Bolder font for the title */
+}
+
+.image-details p {
+  font-size: 1em; /* Standard font size for paragraph */
+  margin-bottom: 1em; /* Space below each paragraph */
+  color: #666; /* Slightly muted text color */
+}
+
+/* Style the button to be more eye-catching */
+.image-details button {
+  background-color: #5cb85c; /* Green background */
+  color: white; /* White text */
+  padding: 0.5em 1em; /* Top/bottom and left/right padding */
+  font-size: 1em; /* Standard font size for button text */
+  border: none; /* Remove default border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Change mouse cursor to pointer */
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+/* Hover effect for button */
+.image-details button:hover {
+  background-color: #449d44; /* Darker green on hover */
+}
+
+/* Style for the text box */
+.image-details .form-control {
+  width: 100%; /* Take full width of the parent */
+  margin-top: 1em; /* Space above */
+  margin-bottom: 1em; /* Space below */
+}
+
+@media (max-width: 768px) {
+  .image-details {
+    max-width: 100%; /* Full width on small screens */
+    margin-top: 20px; /* Adjust spacing for smaller screens */
+    top: 10px; /* Less vertical offset on smaller screens */
+  }
+}
+
+#suggestions {
+    display: block; /* Show the suggestions */
+    position: absolute;
+    top: 100%; /* Directly below the search bar */
+    left: 0;
+    right: 0;
+    border: 1px solid #ddd;
+    border-top: none;
+    background-color: white;
+    z-index: 1000; /* Higher than other elements */
+}
+
+
+#suggestions .suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+}
+
+#suggestions .suggestion-item:last-child {
+    border-bottom: none;
+}
+.search-bar {
+    position: relative; /* Essential for positioning children absolutely */
+}
+.suggestions-list {
+    position: absolute;
+    top: 100%; /* Position the top of the suggestion list right below the search input */
+    left: 0;
+    right: 0;
+    border: 1px solid #ddd;
+    border-top: none; /* Avoid double border where the search input meets the suggestion list */
+    background-color: white;
+    z-index: 10; /* Ensure it appears above other content */
+}

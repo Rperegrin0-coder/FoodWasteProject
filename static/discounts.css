@@ -9,6 +9,7 @@ body {
 .navbar {
     background-color: #004d40; /* A deeper shade for a more professional appearance */
     border-bottom: 3px solid #00251a; /* A subtle border to enhance the navbar */
+
 }
 
 .navbar-dark .navbar-brand,
@@ -21,76 +22,80 @@ body {
 .navbar-dark .nav-link:hover {
     color: #adebad; /* A lighter green for hover states */
 }
-
-/* Sidebar Filter Styles */
-/* Sidebar filter styles */
-.filter-sidebar {
-    background-color: #9db89b; /* A clean white background for contrast */
-    padding: 20px;
-    border-radius: 8px; /* Softly rounded corners */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* A light shadow for depth */
-    margin-bottom: 2rem; /* Spacing from the main content for separation */
+.btn-custom {
+    background-color: #4CAF50; /* Green button for actions that match the sustainability theme */
+    color: #ffffff; /* White text for better visibility */
+    border: none;
+}
+.btn-custom:hover {
+    background-color: #388E3C; /* Darker green on hover for interaction feedback */
 }
 
-.filter-sidebar h5 {
-    font-size: 16px; /* Slightly larger font for visibility */
-    font-weight: 600; /* Semi-bold for heading importance */
-    color: #333; /* A dark grey that stands out */
-    margin-bottom: 10px; /* Less space between the heading and filter to group them visually */
-    padding-left: 10px; /* Aligned with the select boxes */
-    border-left: 4px solid #4CAF50; /* A colored bar to denote active sections */
+/* The side panel (hidden by default) */
+.side-view-panel {
+    height: 100%;
+    width: 0;  /* Start off with width 0 */
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #D4EDDA; /* Soft, earthy green */
+    overflow-x: hidden;
+    transition: 0.5s; /* Smooth transition for opening and closing */
+    padding-top: 60px;
 }
 
-.filter-sidebar .form-control {
-    font-size: 14px; /* A standard font size for form elements */
-    color: #495057; /* Standard text color for contrast */
-    background-color: #f8f9fa; /* A light grey background for the form fields to distinguish them */
-    border: 1px solid #ced4da; /* A standard border color */
-    border-radius: 0.25rem; /* A consistent border-radius with other elements */
-    box-shadow: none; /* No shadow for a flatter, cleaner style */
-    margin-bottom: 1rem; /* Consistent spacing between each filter option */
+/* The close button */
+.side-view-panel .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    color: #155724; /* Dark green for better visibility */
 }
 
-.filter-sidebar .form-control:focus {
-    border-color: #80bdff; /* A focus color that stands out */
-    outline: 0; /* Remove the default focus outline */
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); /* Subtle focus shadow for accessibility */
+.side-view-panel a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #155724; /* Dark green for text */
+    display: block;
+    transition: 0.3s;
 }
 
-/* Additional form controls like checkboxes, radios, etc. can be styled similarly */
-
-/* If using buttons in the sidebar, they can be styled for a flat design with just a border and no shadow */
-.btn-outline-primary {
-    color: #4CAF50; /* Use the primary color for the text */
-    border: 1px solid #4CAF50; /* A border of the same color */
-    background-color: transparent; /* A transparent background for a flat look */
+.side-view-panel a:hover {
+    color: #81C784; /* Lighter, vibrant green for hover */
 }
 
-.btn-outline-primary:hover {
-    color: #fff; /* White text on hover */
-    background-color: #4CAF50; /* Primary color background on hover */
-    border-color: #4CAF50; /* Same color for the border to match */
+.side-view-panel .user-info {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* Adds a subtle line below the user info */
 }
 
-
-/* Add more styles as needed */
-/* SEARCH BAR */
-.search-bar {
-    padding: 1rem;
+.side-view-panel .user-email {
+    font-size: 16px;
+    font-weight: bold;
+    color: #004d40; /* Adjust color to fit your theme */
+    margin-bottom: 15px; /* Adds some space below the email */
 }
 
-.search-bar form {
-    display: flex;
-    width: 100%;
+.side-view-panel .logout-link {
+    font-size: 14px;
+    color: #d9534f; /* A color that suggests an action (e.g., logout) */
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid #d9534f;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-.search-bar input[type="text"] {
-    width: 100%;
-    margin-left: 0.5rem;
-    padding: 0.5rem;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
+.side-view-panel .logout-link:hover, .side-view-panel .logout-link:focus {
+    background-color: #d9534f;
+    color: #ffffff;
 }
+
 
 /* Adjustments to the card container */
 .card {
@@ -155,6 +160,94 @@ body {
 
 .badge-warning {
     font-size: 14px; /* Adjust size as needed */
+}
+
+.search-container {
+    position: relative;
+    /* Other styling here */
+}
+/* Search Bar Container */
+.search-bar {
+    display: flex; /* Use flexbox for alignment */
+    gap: 10px; /* Adds space between search input and button */
+    padding: 1rem;
+    align-items: center; /* Centers the items vertically */
+    width: 100%; /* Full width of its parent container */
+}
+
+/* Search Input Field */
+.search-bar input[type="search"] {
+    flex-grow: 1; /* Allows the input to grow and fill the space */
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    font-size: 1rem; /* Standard font size */
+    line-height: 1.5; /* Comfortable line height for readability */
+}
+/* Suggestions List Container */
+/* Suggestions List Container */
+#suggestions {
+    position: absolute;
+    top: 100%; /* Positioned directly below the search input */
+    left: 1rem; /* Aligns with the padding of the search-bar */
+    right: 1rem; /* Aligns with the padding of the search-bar */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    z-index: 1050; /* Ensure it's above other fixed elements like a navbar */
+    max-height: 300px;
+    overflow-y: auto; /* Allows scrolling within the dropdown */
+}
+/* Suggestion Item */
+.suggestion-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+
+.suggestion-item:hover {
+    background-color: #f8f8f8; /* A light grey background for the hovered item */
+}
+
+.suggestion-item:last-child {
+    border-bottom: none; /* Removes the border from the last item to prevent a double border */
+}
+
+/* Media Queries for Responsive Adjustments */
+@media (max-width: 768px) {
+    .search-bar, .btn-map-view {
+        width: 100%;
+        margin-bottom: 10px; /* Adds spacing for smaller devices */
+    }
+    .btn-map-view {
+        height: auto; /* Resets the height for small devices */
+    }
+
+    .search-bar input[type="text"] {
+        margin-left: 0.25rem;
+        padding: 0.25rem;
+    }
+
+    #suggestions .suggestion-item {
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+/* Search Bar and Map Button Layout */
+.search-bar form {
+    width: 100%;
+}
+
+/* View Map Button */
+.btn-map-view {
+    white-space: nowrap; /* Prevents the button text from wrapping */
+    padding: 0.5rem 1rem;
+}
+
+.content-area {
+    margin-top: 1rem; /* Add space between navbar and content area */
 }
 
 
