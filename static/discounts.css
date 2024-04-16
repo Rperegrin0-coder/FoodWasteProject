@@ -31,55 +31,70 @@ body {
     background-color: #388E3C; /* Darker green on hover for interaction feedback */
 }
 
-/* The side panel (hidden by default) */
+/* Side view panel styles */
 .side-view-panel {
     height: 100%;
-    width: 0;  /* Start off with width 0 */
+    width: 250px; /* Set width to match the welcome page */
     position: fixed;
     z-index: 1;
     top: 0;
     right: 0;
-    background-color: #D4EDDA; /* Soft, earthy green */
+    background-color: #D4EDDA;
     overflow-x: hidden;
-    transition: 0.5s; /* Smooth transition for opening and closing */
+    transition: 0.5s;
     padding-top: 60px;
 }
 
-/* The close button */
 .side-view-panel .closebtn {
     position: absolute;
     top: 0;
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
-    color: #155724; /* Dark green for better visibility */
-}
-
-.side-view-panel a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #155724; /* Dark green for text */
-    display: block;
-    transition: 0.3s;
-}
-
-.side-view-panel a:hover {
-    color: #81C784; /* Lighter, vibrant green for hover */
+    color: #155724;
 }
 
 .side-view-panel .user-info {
     text-align: center;
     padding: 10px;
-    border-bottom: 1px solid #ddd; /* Adds a subtle line below the user info */
+    border-bottom: 1px solid #ddd;
 }
 
 .side-view-panel .user-email {
     font-size: 16px;
     font-weight: bold;
-    color: #004d40; /* Adjust color to fit your theme */
-    margin-bottom: 15px; /* Adds some space below the email */
+    color: #004d40;
+    margin-bottom: 10px;
 }
+
+.side-view-panel .side-panel-link,
+.side-view-panel .logout-link,
+.side-view-panel .profile-link { /* Add styling for profile link */
+    font-size: 14px; /* Decrease font size for better alignment */
+    color: #155724; /* Adjust color to fit your theme */
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid transparent; /* Remove border to simplify design */
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    display: block;
+    margin: 5px auto; /* Center links horizontally */
+    max-width: 150px; /* Limit width to avoid stretching */
+}
+
+.side-view-panel .side-panel-link:hover,
+.side-view-panel .logout-link:hover,
+.side-view-panel .profile-link:hover { /* Add hover effect for profile link */
+    background-color: #81C784; /* Change background color on hover */
+    color: #fff; /* Change text color on hover */
+}
+
+.side-view-panel .side-panel-link:last-child,
+.side-view-panel .logout-link:last-child,
+.side-view-panel .profile-link:last-child { /* Apply last-child styling */
+    margin-bottom: 10px; /* Add some space below the last link */
+}
+
 
 .side-view-panel .logout-link {
     font-size: 14px;
@@ -145,7 +160,10 @@ body {
 
 
 
-
+.fa-heart-o {
+    color: #d9534f; /* Heart color */
+    font-size: 24px; /* Adjust size as needed */
+}
 
 
 
@@ -153,10 +171,7 @@ body {
     color: orange;
 }
 
-.fa-heart-o {
-    color: #d9534f; /* Heart color */
-    font-size: 24px; /* Adjust size as needed */
-}
+
 
 .badge-warning {
     font-size: 14px; /* Adjust size as needed */
@@ -244,10 +259,28 @@ body {
 .btn-map-view {
     white-space: nowrap; /* Prevents the button text from wrapping */
     padding: 0.5rem 1rem;
+    margin-top: 15px; /* Add margin to the top */
+}
+
+.listing-container {
+    max-height: 600px;  /* Adjust this height based on your layout needs */
+    overflow-y: auto;   /* Enables vertical scrolling */
 }
 
 .content-area {
-    margin-top: 1rem; /* Add space between navbar and content area */
+    max-height: 800px; /* This is the maximum height the container will have */
+    overflow-y: auto; /* This will add a scrollbar to the container when content overflows */
 }
 
+.listing-item {
+    display: flex; /* This ensures that the items flex within the container */
+    flex-direction: column; /* Aligns the item's content vertically */
+    justify-content: space-between; /* Distributes space above and below the content */
+    min-height: 200px; /* This ensures all items have at least this height */
+    /* Add other styles for .listing-item here */
+}
 
+.row {
+    margin-left: -15px;
+    margin-right: -15px; /* Adjusts for the row's negative margins if necessary */
+}

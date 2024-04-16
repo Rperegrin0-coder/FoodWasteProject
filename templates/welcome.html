@@ -28,6 +28,8 @@
     <a href="javascript:void(0)" class="closebtn" onclick="closeSideView()">&times;</a>
     <div class="user-info">
         <p class="user-email">{{ session['user_email'] }}</p>
+        <a href="/favorites" class="side-panel-link">Favorites</a> <!-- Link to Favorites -->
+        <a href="/profile" class="side-panel-link">Profile</a> <!-- Add Profile link -->
         <a href="/logout" class="logout-link">Logout</a>
     </div>
     {% else %}

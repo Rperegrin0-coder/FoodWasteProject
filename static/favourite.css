@@ -1,0 +1,151 @@
+/* favorites.css */
+/* General Page Styles */
+body {
+  background-color: #f5f5f5; /* Light background for the page */
+  font-family: 'Arial', sans-serif; /* Default font for the page */
+}
+
+/* Card Styles */
+.card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+  transition: 0.3s; /* Smooth transition for hover effects */
+  border-radius: 5px; /* Rounded corners for the card */
+  overflow: hidden; /* Ensures the content fits in the card */
+  margin-bottom: 20px; /* Spacing between cards */
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Larger shadow on hover */
+}
+
+.card img {
+  width: 100%; /* Full width images */
+  height: auto; /* Auto height to maintain aspect ratio */
+}
+
+.card-body {
+  padding: 15px; /* Padding inside the card */
+}
+
+.card-title {
+  font-size: 1.2em; /* Slightly larger text for the title */
+  margin-bottom: 15px; /* Spacing below the title */
+}
+
+.card-text {
+  font-size: 0.9em; /* Slightly smaller text for the description */
+}
+
+/* Favorite Icon Styles */
+.favorite-icon {
+  color: #ff0000; /* Red color for the filled heart */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.favorite-icon:hover {
+  opacity: 0.7; /* Slightly transparent on hover */
+}
+
+.fa-heart-o {
+  color: #d3d3d3; /* Light grey color for the non-favorited heart */
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+  .card {
+    width: 100%; /* Full width cards on smaller screens */
+  }
+}
+
+/* You can add more styles as per your design requirements */
+
+/* Navigation Bar */
+.navbar {
+    background-color: #004d40; /* A deeper shade for a more professional appearance */
+    border-bottom: 3px solid #00251a; /* A subtle border to enhance the navbar */
+
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .nav-link {
+    color: #ffffff;
+    transition: color 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.navbar-dark .navbar-brand:hover,
+.navbar-dark .nav-link:hover {
+    color: #adebad; /* A lighter green for hover states */
+}
+.btn-custom {
+    background-color: #4CAF50; /* Green button for actions that match the sustainability theme */
+    color: #ffffff; /* White text for better visibility */
+    border: none;
+}
+.btn-custom:hover {
+    background-color: #388E3C; /* Darker green on hover for interaction feedback */
+}
+
+/* The side panel (hidden by default) */
+.side-view-panel {
+    height: 100%;
+    width: 0;  /* Start off with width 0 */
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #D4EDDA; /* Soft, earthy green */
+    overflow-x: hidden;
+    transition: 0.5s; /* Smooth transition for opening and closing */
+    padding-top: 60px;
+}
+
+/* The close button */
+.side-view-panel .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    color: #155724; /* Dark green for better visibility */
+}
+
+.side-view-panel a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #155724; /* Dark green for text */
+    display: block;
+    transition: 0.3s;
+}
+
+.side-view-panel a:hover {
+    color: #81C784; /* Lighter, vibrant green for hover */
+}
+
+.side-view-panel .user-info {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* Adds a subtle line below the user info */
+}
+
+.side-view-panel .user-email {
+    font-size: 16px;
+    font-weight: bold;
+    color: #004d40; /* Adjust color to fit your theme */
+    margin-bottom: 15px; /* Adds some space below the email */
+}
+
+.side-view-panel .logout-link {
+    font-size: 14px;
+    color: #d9534f; /* A color that suggests an action (e.g., logout) */
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid #d9534f;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.side-view-panel .logout-link:hover, .side-view-panel .logout-link:focus {
+    background-color: #d9534f;
+    color: #ffffff;
+}

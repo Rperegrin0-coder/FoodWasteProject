@@ -8,47 +8,80 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='item_detail.css') }}">
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">GreenGrain</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/submit">Submit Listing</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/signup">Sign Up / Log In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/register_business">Register Business</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    {% include 'navbar.html' %}
     <div class="image-container">
         <img src="{{ listing['image_url'] }}" alt="Image of {{ listing['name'] }}" class="full-width-image">
     </div>
+
     <div class="image-details text-center">
-    <h2 class="detail-title">{{ listing['name'] }}</h2>
-    <p class="detail-description">Description: {{ listing['description'] }}</p>
-    <p class="detail-price">Original Price: <del>${{ listing['original_price'] }}</del></p>
-    <p class="detail-discounted-price">Discounted Price: ${{ listing['discounted_price'] }}</p>
-    <p class="detail-pickup-time">Pickup Time: {{ listing['pickup_time'] }}</p>
-    <p class="detail-bags-left">Bags Left: {{ listing['remaining'] }}</p>
-    <p class="detail-collection-day">Collection Day: {{ listing['collection_day'] }}</p>
-    <p class="detail-postcode">Postcode: {{ listing['postcode'] }}</p>
-    <textarea class="form-control detail-extra-details my-3" id="extraDetails" rows="3" placeholder="Enter any additional details here..."></textarea>
-    <button onclick="makeReservation('{{ listing['id'] }}')" class="btn btn-primary detail-reserve-button">Reserve</button>
+        <!-- Title Section -->
+        <div class="detail-section">
+            <h2 class="detail-title">{{ listing['name'] }}</h2>
+        </div>
+
+        <!-- Description Section -->
+        <div class="detail-section">
+            <p class="detail-icon"><i class="fas fa-info-circle"></i></p>
+            <p class="detail-description">Description: {{ listing['description'] }}</p>
+        </div>
+
+        <!-- Price Section -->
+        <div class="detail-section">
+            <p class="detail-icon"><i class="fas fa-dollar-sign"></i></p>
+            <p class="detail-price">Original Price: <del>${{ listing['original_price'] }}</del></p>
+            <p class="detail-icon"><i class="fas fa-tag"></i></p>
+            <p class="detail-discounted-price">Discounted Price: ${{ listing['discounted_price'] }}</p>
+        </div>
+
+        <!-- Pickup Time Section -->
+        <div class="detail-section">
+            <p class="detail-icon"><i class="far fa-clock"></i></p>
+            <p class="detail-pickup-time">Pickup Time: {{ listing['pickup_time'] }}</p>
+        </div>
+
+        <!-- Bags Left Section -->
+        <div class="detail-section">
+            <p class="detail-icon"><i class="fas fa-shopping-bag"></i></p>
+            <p class="detail-bags-left">Bags Left: {{ listing['remaining'] }}</p>
+        </div>
+
+        <!-- Collection Day Section -->
+        <div class="detail-section">
+            <p class="detail-icon"><i class="far fa-calendar-alt"></i></p>
+            <p class="detail-collection-day">Collection Day: {{ listing['collection_day'] }}</p>
+        </div>
+
+        <!-- Postcode Section -->
+        <div class="detail-section">
+            <p class="detail-icon"><i class="fas fa-map-marker-alt"></i></p>
+            <p class="detail-postcode">Postcode: {{ listing['postcode'] }}</p>
+        </div>
+
+        <!-- Additional Details Section -->
+        <div class="detail-section">
+            <p class="detail-icon"><i class="fas fa-pencil-alt"></i></p>
+            <textarea class="form-control detail-extra-details my-3" id="extraDetails" rows="3" placeholder="Enter any additional details here..."></textarea>
+        </div>
+
+        <!-- Donation Option Section -->
+        <div class="detail-section">
+            <p class="detail-icon"><i class="fas fa-donate"></i></p>
+            <div class="form-group">
+                <label for="donationAmount">Select Donation Amount:</label>
+                <select class="form-control" id="donationAmount">
+                    <option value="5">$5</option>
+                    <option value="10">$10</option>
+                    <option value="20">$20</option>
+                    <option value="custom">Other</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Reserve Button Section -->
+        <div class="detail-section">
+            <button onclick="makeReservation('{{ listing['id'] }}', '{{ listing['original_price'] }}', '{{ listing['discounted_price'] }}')" class="btn btn-primary detail-reserve-button">Reserve</button>
+        </div>
     </div>
-
-
-
 
     <!-- Bootstrap JS and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -57,9 +90,36 @@
 
     <!-- Your Custom Script for making reservations -->
     <script>
-        function makeReservation(listingId) {
-            console.log("Making reservation for listing ID:", listingId);
-            // Add logic for making a reservation, such as sending a POST request to your server
+        function makeReservation(listingId, originalPrice, discountedPrice) {
+            // Retrieve selected donation amount
+            var donationAmount = document.getElementById("donationAmount").value;
+
+            // Prepare data to send to the server
+            var formData = new FormData();
+            formData.append('listing_id', listingId);
+            formData.append('original_price', originalPrice); // Add original_price to the form data
+            formData.append('discounted_price', discountedPrice); // Add discounted_price to the form data
+            formData.append('donation_amount', donationAmount);
+
+            // Send POST request to the server
+            fetch('/make_reservation', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Reservation successful
+                    console.log("Reservation made successfully");
+                    // Redirect to the discounts page
+                    window.location.href = "/discounts";
+                } else {
+                    // Reservation failed
+                    console.error("Reservation failed");
+                }
+            })
+            .catch(error => {
+                console.error("Error making reservation:", error);
+            });
         }
     </script>
 </body>

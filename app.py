@@ -8,6 +8,7 @@ from flask_session import Session
 import requests
 from firebase_admin import storage
 
+
 # Initialize Flask app
 app = Flask(__name__)
 app.secret_key = 'pere'
@@ -129,6 +130,8 @@ def discounts():
     return render_template('discounts.html', listings=listings)
 
 
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -232,6 +235,153 @@ def search_suggestions():
     return jsonify({'suggestions': suggestions})
 
 
+def query_user_favorites(user_id):
+    """
+    Query the database for the user's favorites.
+
+    :param user_id: The unique identifier for the user.
+    :return: A list of favorite listings or None if there are no favorites.
+    """
+    ref = db.reference(f'users/{user_id}/favorites')
+    user_favorites = ref.get()
+
+    if user_favorites:
+        # Assuming the favorites are stored as a list of listing IDs
+        # Fetch the details of the listings
+        listings_ref = db.reference('listings')
+        favorite_listings = []
+        for fav_id in user_favorites:
+            listing = listings_ref.child(fav_id).get()
+            if listing:
+                favorite_listings.append(listing)
+        return favorite_listings
+    return None
+
+@app.route('/favorites')
+def favorites():
+    user_id = session.get('user_id')
+    print(f"Fetching favorites for user: {user_id}")
+
+    if user_id:
+        try:
+            user_favorites = query_user_favorites(user_id)
+            print(f"User favorites found: {user_favorites}")
+
+            if user_favorites is not None:
+                return render_template('favourite.html', user_favorites=user_favorites)
+            else:
+                print("No favorites found for the user.")
+                return render_template('favourite.html', error="No favorites found.")
+        except Exception as e:
+            print(f"An error occurred while fetching user favorites: {e}")
+            return render_template('favourite.html', error="An error occurred.")
+    else:
+        print("User not logged in, redirecting to login.")
+        return redirect(url_for('login'))
+
+app.route('/toggle_favorite/<listing_id>', methods=['POST'])
+@app.route('/toggle_favorite/<listing_id>', methods=['POST'])
+def toggle_favorite(listing_id):
+    user_id = session.get('user_id')
+
+    if user_id:
+        try:
+            result = toggle_user_favorite(user_id, listing_id)
+            if result is None:
+                return jsonify({'error': 'Failed to toggle favorite'}), 500
+
+            return jsonify({'isFavorite': result}), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+    else:
+        return jsonify({'error': 'User not logged in'}), 401
+
+
+
+def toggle_user_favorite(user_id, listing_id):
+    try:
+        # Reference to the user's favorites in the database
+        ref = db.reference(f'users/{user_id}/favorites')
+
+        # Get the current list of favorites for the user
+        favorites = ref.get() or []
+
+        if listing_id in favorites:
+            # If the listing is currently a favorite, remove it
+            favorites.remove(listing_id)
+            now_favorite = False
+        else:
+            # If the listing is not a favorite, add it
+            favorites.append(listing_id)
+            now_favorite = True
+
+        # Update the database with the new list of favorites for the user
+        ref.set(favorites)
+        return now_favorite
+    except Exception as e:
+        # Log the error or handle it as needed
+        print(f"Error toggling favorite for user {user_id} and listing {listing_id}: {str(e)}")
+        return None
+
+
+@app.route('/profile')
+def profile():
+    # Fetch user-specific data from the database based on the logged-in user's ID
+    user_id = session.get('user_id')
+    if user_id:
+        user_ref = db.reference('users').child(user_id)
+        user_data = user_ref.get()
+        orders = user_data.get('orders', [])
+        co2_saved = user_data.get('co2_saved', 0)
+        money_saved = user_data.get('money_saved', 0)
+
+        # Debugging: Print fetched user data
+        print("User Profile Data:", user_data)
+
+        # Render the profile page with the fetched data
+        return render_template('profile.html', orders=orders, co2_saved=co2_saved, money_saved=money_saved)
+    else:
+        # Debugging: Print user not logged in message
+        print("User not logged in")
+        return "User not logged in", 401
+
+
+@app.route('/make_reservation', methods=['POST'])
+def make_reservation():
+    if request.method == 'POST':
+        data = request.form.to_dict()
+        # Store reservation details in the database as an order
+        order_ref = db.reference('/orders')
+        order_ref.push().set(data)
+
+        # Update user profile with CO2 saved and money saved
+        user_id = session.get('user_id')
+        if user_id:
+            user_ref = db.reference('users').child(user_id)
+            user_data = user_ref.get()
+
+            # Update CO2 saved
+            co2_saved = user_data.get('co2_saved', 0) + 20
+            user_ref.update({'co2_saved': co2_saved})
+
+            # Calculate money saved based on original and discounted prices
+            original_price = float(data['original_price'])
+            discounted_price = float(data['discounted_price'])
+            money_saved = user_data.get('money_saved', 0) + (original_price - discounted_price)
+            user_ref.update({'money_saved': money_saved})
+
+            # Add the reservation to the user's profile orders
+            orders_ref = user_ref.child('orders')
+            orders_ref.push().set(data)
+
+            # Debugging: Print reservation made successfully message
+            print("Reservation made successfully")
+
+            return "Reservation made successfully", 200
+        else:
+            # Debugging: Print user not logged in message
+            print("User not logged in")
+            return "User not logged in", 401
 
 
 if __name__ == '__main__':

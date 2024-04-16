@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>View Discounts - GreenGrain</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='discounts.css') }}">
@@ -19,8 +20,10 @@
     <a href="javascript:void(0)" class="closebtn" onclick="closeSideView()">&times;</a>
     <div class="user-info">
         <p class="user-email">{{ session['user_email'] }}</p>
+        <a href="/favorites" class="side-panel-link">Favorites</a>
+        <a href="/profile" class="side-panel-link">Profile</a> <!-- Add Profile link -->
         <a href="/logout" class="logout-link">Logout</a>
-        <a href="/favorites" class="side-panel-link">Favorites</a> <!-- Link to Favorites -->
+        <!-- Link to Favorites -->
     </div>
     {% else %}
     <a href="javascript:void(0)" class="closebtn" onclick="closeSideView()">&times;</a>
@@ -168,10 +171,12 @@
                     <!-- Listing Title and Favorite Icon -->
                     <div class="d-flex justify-content-between align-items-start">
                         <h5 class="card-title">{{ listing.name }}</h5>
-                        <a href="#" onclick="toggleFavorite(this); return false;" class="favorite-icon">
-                            <i class="fa fa-heart-o" aria-hidden="true"></i>
+                        <!-- Update the link to call toggleFavorite with the listing id -->
+                        <a href="#" onclick="toggleFavorite(this, '{{ listing.id }}'); return false;" class="favorite-icon">
+                            <i class="fa fa-heart-o" aria-hidden="true" data-listing-id="{{ listing.id }}"></i>
                         </a>
                     </div>
+
 
                     <p class="card-text">{{ listing.description }}</p>
                     <ul class="list-unstyled mt-auto">
@@ -191,27 +196,8 @@
 
 
 
-    <!-- JavaScript to handle adding to favorites -->
-    <script>
-    function addToFavorites(listingName) {
-        console.log("Adding to favorites:", listingName);
-        // Add logic to handle adding to favorites, such as sending an AJAX request to your server
-    }
 
-    function toggleFavorite(element) {
-    // Check if the class list contains 'fa-heart-o' to determine if it's not favorited
-    if (element.querySelector('i').classList.contains('fa-heart-o')) {
-        // It's not favorited, add the 'fa-heart' class and remove the 'fa-heart-o' class
-        element.querySelector('i').classList.add('fa-heart');
-        element.querySelector('i').classList.remove('fa-heart-o');
-    } else {
-        // It's already favorited, remove the 'fa-heart' class and add the 'fa-heart-o' class
-        element.querySelector('i').classList.add('fa-heart-o');
-        element.querySelector('i').classList.remove('fa-heart');
-    }
-    // Here you would also add your code to handle the server-side logic, e.g., AJAX request
-    }
-
+<script>
     // Filtering the listings based on the search
     function filterListings() {
         var input, filter, listings, title, i, txtValue;
@@ -261,31 +247,7 @@
             // You might also want to trigger a search or other action here
         }
 
-        document.addEventListener("DOMContentLoaded", function() {
-        // Event listener for changes on the hygiene filter
-        document.getElementById('hygieneFilter').addEventListener('change', function() {
-            // Get the selected hygiene rating value
-            var selectedRating = this.value;
-            // Convert to a number if not 'all'
-            selectedRating = selectedRating === 'all' ? 0 : parseInt(selectedRating, 10);
 
-            // Get all the listing elements
-            var listings = document.getElementsByClassName('listing-item');
-
-            // Loop through listings to show/hide based on rating
-            Array.from(listings).forEach(function(listing) {
-                // Retrieve the rating from the listing's data attribute
-                var listingRating = parseInt(listing.getAttribute('data-rating'), 10);
-
-                // Show or hide the listing based on the selected rating
-                if (listingRating >= selectedRating || selectedRating === 0) {
-                    listing.style.display = ''; // Show
-                } else {
-                    listing.style.display = 'none'; // Hide
-                }
-            });
-        });
-    });
     // Open the side view panel
     function openSideView() {
         document.getElementById("sideViewPanel").style.width = "250px";
@@ -330,7 +292,124 @@
       // Fallback location - center the map somewhere if you would like
       // Example: map.setCenter({lat: -34.397, lng: 150.644});
     }
-    </script>
+ <!-- JavaScript to handle adding to favorites -->
+
+    function addToFavorites(listingId) {
+    console.log("Adding to favorites:", listingId);
+
+    // Get the current user's ID
+    var userId = firebase.auth().currentUser.uid;
+
+    // Reference to the user's favorites in the database
+    var userFavoritesRef = firebase.database().ref('users/' + userId + '/favorites');
+
+    // Use 'transaction' to ensure that the update is atomic
+    userFavoritesRef.transaction(function(currentFavorites) {
+        if (currentFavorites) {
+            if (currentFavorites.indexOf(listingId) === -1) {
+                // If the listing is not already in favorites, add it
+                currentFavorites.push(listingId);
+            } else {
+                // If the listing is already in favorites, remove it
+                currentFavorites = currentFavorites.filter(function(favId) {
+                    return favId !== listingId;
+                });
+            }
+        } else {
+            // If there are no favorites, create an array with the listingId
+            currentFavorites = [listingId];
+        }
+        return currentFavorites; // Return the updated favorites array to be saved in the database
+    }, function(error, committed, snapshot) {
+        if (error) {
+            console.error('Transaction failed abnormally!', error);
+        } else if (!committed) {
+            console.error('We aborted the transaction (because ada already exists).');
+        } else {
+            console.log('User ' + userId + ' favorites updated!');
+            // Optionally, update the UI to reflect the change
+            updateFavoriteIconUI(listingId, snapshot.val().includes(listingId));
+        }
+    });
+}
+
+function toggleFavorite(element) {
+    // Check if the class list contains 'fa-heart-o' to determine if it's not favorited
+    if (element.querySelector('i').classList.contains('fa-heart-o')) {
+        // It's not favorited, add the 'fa-heart' class and remove the 'fa-heart-o' class
+        element.querySelector('i').classList.add('fa-heart');
+        element.querySelector('i').classList.remove('fa-heart-o');
+    } else {
+        // It's already favorited, remove the 'fa-heart' class and add the 'fa-heart-o' class
+        element.querySelector('i').classList.add('fa-heart-o');
+        element.querySelector('i').classList.remove('fa-heart');
+    }
+    // Here you would also add your code to handle the server-side logic, e.g., AJAX request
+    }
+ document.addEventListener("DOMContentLoaded", function() {
+    // Sorting listener
+    document.getElementById('sortFilter').addEventListener('change', function() {
+        var selectedOption = this.value;
+        var listings = Array.from(document.querySelectorAll('.listing-item'));
+
+        // Sort based on the selected option
+        sortListings(listings, selectedOption);
+
+        // Reorder the DOM
+        reorderListingsInDOM(listings);
+    });
+});
+
+// Define the sorting logic in a separate function for clarity
+function sortListings(listings, selectedOption) {
+    if (selectedOption === 'name') {
+        listings.sort((a, b) => {
+            var nameA = a.getAttribute('data-name').toLowerCase();
+            var nameB = b.getAttribute('data-name').toLowerCase();
+            return nameA.localeCompare(nameB);
+        });
+    } else if (selectedOption === 'price_low_high') {
+        listings.sort((a, b) => parseFloat(a.getAttribute('data-price')) - parseFloat(b.getAttribute('data-price')));
+    } else if (selectedOption === 'price_high_low') {
+        listings.sort((a, b) => parseFloat(b.getAttribute('data-price')) - parseFloat(a.getAttribute('data-price')));
+    } else if (selectedOption === 'discount') {
+        listings.sort((a, b) => parseFloat(b.getAttribute('data-discount')) - parseFloat(a.getAttribute('data-discount')));
+    } else if (selectedOption === 'pickup_time') {
+        listings.sort((a, b) => new Date(a.getAttribute('data-pickup-time')).getTime() - new Date(b.getAttribute('data-pickup-time')).getTime());
+    }
+}
+
+// Reorders the listings in the DOM after sorting
+// Reorders the listings in the DOM after sorting
+function reorderListingsInDOM(listings) {
+    // Target the container that directly holds .listing-item elements
+    // This container should be a child of .content-area and a sibling to the search bar and map view button
+    var listingsContainer = document.querySelector('.content-area .listings-container');
+
+    // Clear existing listing items only, not the entire .content-area
+    listingsContainer.innerHTML = '';
+
+    // Append sorted listings back to their container
+    listings.forEach(listing => {
+        listingsContainer.appendChild(listing);
+    });
+}
+
+// Event listener for sort filter changes
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('sortFilter').addEventListener('change', function() {
+        var selectedOption = this.value;
+        var listings = Array.from(document.querySelectorAll('.listing-item'));
+
+        // Sort and reorder listings
+        sortListings(listings, selectedOption);
+        reorderListingsInDOM(listings);
+    });
+});
+
+
+</script>
+
 
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
