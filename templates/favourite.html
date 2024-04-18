@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Favorites - GreenGrain</title>
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='favourite.css') }}">
-    <!-- Font Awesome for star and heart icons -->
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
     {% include 'navbar.html' %}
     <div class="container mt-4">
-        <h2>Your Favorites</h2>
+        <h2 class="mb-4">Your Favorites</h2>
         <div class="row">
             {% if user_favorites %}
                 {% for listing in user_favorites %}
@@ -22,7 +24,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">{{ listing.name }}</h5>
                                 <p class="card-text">{{ listing.description }}</p>
-                                <div class="d-flex justify-content-between">
+                                <div class="d-flex justify-content-between align-items-center">
                                     <a href="#" class="btn btn-primary">Details</a>
                                     <span class="fa fa-heart text-danger"></span>
                                 </div>

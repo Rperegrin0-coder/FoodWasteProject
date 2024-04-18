@@ -6,31 +6,101 @@
     <title>Item Detail</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            background-color: #E6F4F1; /* Sustainable background color */
+        }
+
+        .profile-container {
+            background-color: #E6F4F1; /* Profile container background color */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Adding a subtle shadow */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 100vh;
+        }
+
+        .user-info {
+            margin-bottom: 20px;
+        }
+
+        .co2-money-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .co2-money-section {
+            margin-right: 20px;
+        }
+
+        .profile-subheading {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .co2-saved, .money-saved {
+            font-size: 1.2rem;
+        }
+
+        .change-password-link {
+            color: #155724; /* Link color */
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .change-password-link:hover {
+            color: #0D3515; /* Hover color */
+        }
+
+        .orders-button {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
 
     {% include 'navbar.html' %}
     <div class="profile-container">
-        <h1 class="profile-heading">Your Profile</h1>
+        <!-- User Info -->
+        <div class="user-info">
+            <h1 class="profile-heading">{{ user_name }}</h1>
+            <p class="user-email">{{ user_email }}</p>
+        </div>
 
+        <!-- CO2 and Money Saved -->
+        <div class="co2-money-container">
+            <div class="co2-money-section">
+                <section class="profile-section">
+                    <h2 class="profile-subheading"><i class="fas fa-leaf"></i> CO2 Saved</h2>
+                    <p class="co2-saved">{{ co2_saved }} kg</p>
+                </section>
+            </div>
+            <div class="co2-money-section">
+                <section class="profile-section">
+                    <h2 class="profile-subheading"><i class="fas fa-money-bill-wave"></i> Money Saved</h2>
+                    <p class="money-saved">£{{ "%.2f" | format(money_saved) }}</p>
+                </section>
+            </div>
+        </div>
+
+        <!-- Change Password Option -->
         <section class="profile-section">
-            <h2 class="profile-subheading">Your Orders</h2>
-            <ul class="order-list">
-                {% for order in orders %}
-                    <li>{{ order }}</li>
-                {% endfor %}
-            </ul>
+            <h2 class="profile-subheading">Change Password</h2>
+            <!-- Add your change password form or link here -->
+            <!-- Example link: -->
+            <a href="/change_password" class="change-password-link">Change Password</a>
         </section>
 
-        <section class="profile-section">
-            <h2 class="profile-subheading">CO2 Saved</h2>
-            <p class="co2-saved">{{ co2_saved }} kg</p>
-        </section>
-
-        <section class="profile-section">
-            <h2 class="profile-subheading">Money Saved</h2>
-            <p class="money-saved">${{ money_saved }}</p>
-        </section>
+        <!-- Orders Button -->
+        <button class="btn btn-primary orders-button">View Orders</button>
     </div>
 </body>
 </html>

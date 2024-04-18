@@ -34,14 +34,14 @@ body {
 /* Side view panel styles */
 .side-view-panel {
     height: 100%;
-    width: 250px; /* Set width to match the welcome page */
+    width: 0; /* Set initial width to 0 */
     position: fixed;
     z-index: 1;
     top: 0;
     right: 0;
     background-color: #D4EDDA;
     overflow-x: hidden;
-    transition: 0.5s;
+    transition: width 0.5s; /* Adjust transition property to only transition width */
     padding-top: 60px;
 }
 

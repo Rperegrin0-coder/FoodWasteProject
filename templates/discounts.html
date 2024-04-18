@@ -40,22 +40,23 @@
                 <h5>Sort</h5>
                 <select class="form-control mb-3" id="sortFilter">
                     <option value="name">Name</option>
-                    <option value="price_low_high">Price: Low to High</option>
-                    <option value="price_high_low">Price: High to Low</option>
-                    <option value="discount">Discount</option>
-                    <option value="pickup_time">Pickup Time</option>
+                    <option value="price_low_high">Discounted Price: Low to High</option>
+                    <option value="price_high_low">Discounted Price: High to Low</option>
+
                 </select>
 
+
                 <!-- Hygiene Rating -->
-                <h5>Hygiene rating</h5>
-                <select class="form-control mb-3" id="hygieneFilter">
-                    <option value="all">All Ratings</option>
+                <h5>Customer rating</h5>
+                <select class="form-control mb-3" id="ratingFilter" onchange="filterByRating()">
+                    <option value="all" selected>All Ratings</option>
                     <option value="5">★★★★★</option>
                     <option value="4">★★★★☆</option>
                     <option value="3">★★★☆☆</option>
                     <option value="2">★★☆☆☆</option>
                     <option value="1">★☆☆☆☆</option>
                 </select>
+
 
 
                 <!-- Dietary Options -->
@@ -81,17 +82,6 @@
                     <!-- Add more cuisines as needed -->
                 </select>
 
-                <!-- Dishes -->
-                <h5>Dishes</h5>
-                <select class="form-control mb-3" id="dishesFilter">
-                    <option value="all">All Dishes</option>
-                    <option value="pasta">Pasta</option>
-                    <option value="pizza">Pizza</option>
-                    <option value="sandwiches">Sandwiches</option>
-                    <option value="salads">Salads</option>
-                    <!-- Add more dishes as needed -->
-                </select>
-
                 <!-- Categories -->
                 <h5>Categories</h5>
                 <select class="form-control mb-3" id="categoriesFilter">
@@ -107,7 +97,9 @@
 
 
 <!-- Main Content Area -->
+<!-- Main Content Area -->
 <div class="col-md-9 content-area">
+    <!-- Static UI Elements like Search Bar and Map View -->
     <div class="row mb-4">
         <!-- Search Bar -->
         <div class="col">
@@ -119,12 +111,11 @@
                 </form>
             </div>
         </div>
-        <!-- Button to open the map modal -->
+        <!-- Map View Button -->
         <div class="col-auto">
             <button type="button" class="btn btn-info btn-map-view" data-toggle="modal" data-target="#mapModal">View Map</button>
         </div>
     </div>
-
     <!-- Modal for displaying the map -->
     <div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
@@ -143,10 +134,9 @@
     </div>
 
 
-        <div class="row">
-            <!-- Listings loop -->
+        <div class="row listing-container"> <!-- This is the container where listings will be appended -->
         {% for listing in listings %}
-        <div class="col-md-4 mb-4 listing-item" data-name="{{ listing.name | lower }}" data-rating="{{ listing.rating }}">
+        <div class="col-md-4 mb-4 listing-item" data-name="{{ listing.name | lower }}" data-rating="{{ listing.rating }}" data-discounted-price="{{ listing.discounted_price }}" data-pickup-time="{{ listing.pickup_time | to_iso_string }}">
             <div class="card h-100 position-relative">
                 <!-- Star rating -->
                 <div class="card-header">
@@ -180,8 +170,8 @@
 
                     <p class="card-text">{{ listing.description }}</p>
                     <ul class="list-unstyled mt-auto">
-                        <li class="card-text mb-2">Original Price: <del>${{ listing.original_price }}</del></li>
-                        <li class="card-text mb-2">Discounted Price: <strong>${{ listing.discounted_price }}</strong></li>
+                        <li class="card-text mb-2">Original Price: <del>£{{ listing.original_price }}</del></li>
+                        <li class="card-text mb-2">Discounted Price: <strong>£{{ listing.discounted_price }}</strong></li>
                         <li class="card-text mb-3">Pickup Time: {{ listing.pickup_time }}</li>
                     </ul>
                     <a href="{{ url_for('item_detail', listing_id=listing.id) }}" class="btn btn-success mt-auto">Purchase</a>
@@ -217,7 +207,7 @@
     }
    function searchSuggestions() {
     let input = $('#searchInput').val();
-    if(input.length > 1){ // To avoid too many unnecessary calls
+    if (input.length > 0) { // If input length is greater than 0, perform search suggestions
         $.ajax({
             url: "/search_suggestions", // Flask route that returns JSON data
             type: "GET",
@@ -225,8 +215,8 @@
             success: function(data) {
                 let suggestionsBox = $('#suggestions');
                 suggestionsBox.empty(); // Clear previous suggestions
-                if(data.suggestions){
-                    data.suggestions.forEach(function(item){
+                if (data.suggestions) {
+                    data.suggestions.forEach(function(item) {
                         // Append suggestions to the suggestions container
                         suggestionsBox.append(`<div class="suggestion-item" onclick="selectSuggestion('${item}')">${item}</div>`);
                     });
@@ -236,14 +226,16 @@
                 }
             }
         });
-    } else {
-        $('#suggestions').empty().hide(); // No input, clear and hide suggestions
+    } else { // If input length is zero, clear and hide suggestions, and show all listings
+        $('#suggestions').empty().hide(); // Clear and hide suggestions
+        $('.listing-item').show(); // Show all listings
     }
 }
 
         function selectSuggestion(value) {
             $('#searchInput').val(value); // Set input value to the selected suggestion
             $('#suggestions').empty().hide(); // Clear and hide suggestions
+            filterListings();
             // You might also want to trigger a search or other action here
         }
 
@@ -258,6 +250,7 @@
         document.getElementById("sideViewPanel").style.width = "0";
     }
 
+    //
      // Initialize and add the map
     function initMap() {
       if ("geolocation" in navigator) {
@@ -361,6 +354,7 @@ function toggleFavorite(element) {
 });
 
 // Define the sorting logic in a separate function for clarity
+// Define the sorting logic in a separate function for clarity
 function sortListings(listings, selectedOption) {
     if (selectedOption === 'name') {
         listings.sort((a, b) => {
@@ -369,24 +363,19 @@ function sortListings(listings, selectedOption) {
             return nameA.localeCompare(nameB);
         });
     } else if (selectedOption === 'price_low_high') {
-        listings.sort((a, b) => parseFloat(a.getAttribute('data-price')) - parseFloat(b.getAttribute('data-price')));
+        listings.sort((a, b) => parseFloat(a.getAttribute('data-discounted-price')) - parseFloat(b.getAttribute('data-discounted-price')));
     } else if (selectedOption === 'price_high_low') {
-        listings.sort((a, b) => parseFloat(b.getAttribute('data-price')) - parseFloat(a.getAttribute('data-price')));
-    } else if (selectedOption === 'discount') {
-        listings.sort((a, b) => parseFloat(b.getAttribute('data-discount')) - parseFloat(a.getAttribute('data-discount')));
+        listings.sort((a, b) => parseFloat(b.getAttribute('data-discounted-price')) - parseFloat(a.getAttribute('data-discounted-price')));
     } else if (selectedOption === 'pickup_time') {
         listings.sort((a, b) => new Date(a.getAttribute('data-pickup-time')).getTime() - new Date(b.getAttribute('data-pickup-time')).getTime());
     }
 }
 
-// Reorders the listings in the DOM after sorting
-// Reorders the listings in the DOM after sorting
 function reorderListingsInDOM(listings) {
-    // Target the container that directly holds .listing-item elements
-    // This container should be a child of .content-area and a sibling to the search bar and map view button
-    var listingsContainer = document.querySelector('.content-area .listings-container');
+    // Select only the container that holds the listings
+    var listingsContainer = document.querySelector('.listing-container');
 
-    // Clear existing listing items only, not the entire .content-area
+    // Clear only the listing items
     listingsContainer.innerHTML = '';
 
     // Append sorted listings back to their container
@@ -395,17 +384,35 @@ function reorderListingsInDOM(listings) {
     });
 }
 
+
+
 // Event listener for sort filter changes
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('sortFilter').addEventListener('change', function() {
         var selectedOption = this.value;
         var listings = Array.from(document.querySelectorAll('.listing-item'));
-
-        // Sort and reorder listings
         sortListings(listings, selectedOption);
         reorderListingsInDOM(listings);
     });
 });
+
+function filterByRating() {
+    var selectedRating = parseInt(document.getElementById('ratingFilter').value);
+    var listings = document.querySelectorAll('.listing-item');
+
+    listings.forEach(function(listing) {
+        var rating = parseInt(listing.getAttribute('data-rating'));
+        if (selectedRating === 0 || rating >= selectedRating) {
+            listing.style.display = '';
+        } else {
+            listing.style.display = 'none';
+        }
+    });
+}
+
+
+
+
 
 
 </script>

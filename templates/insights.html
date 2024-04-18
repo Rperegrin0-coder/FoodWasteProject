@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='insights.css') }}">
+    <title>Insights</title>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <h1>Insights</h1>
+
+    <!-- Filter form for selecting restaurant/retailer -->
+    <form id="filterForm" method="POST">
+        <label for="restaurant">Select Restaurant/Retailer:</label>
+        <select id="restaurant" name="restaurant">
+            <option value="">All Restaurants/Retailers</option>
+            {% for restaurant_name in insights_data.keys() %}
+                <option value="{{ restaurant_name }}">{{ restaurant_name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    <!-- CO2 Saved Statistics Chart -->
+    <div>
+        <canvas id="statisticsChart" width="800" height="400"></canvas>
+    </div>
+
+    <script>
+    var chartInstance = null; // This will hold our chart instance
+
+    // Get the insights data from Flask and parse it into JavaScript
+    var insightsData = JSON.parse('{{ insights_data | tojson | safe }}');
+
+    // Function to generate a bar chart
+    function generateBarChart(ctx, data, labels) {
+        if (chartInstance) {
+            chartInstance.destroy(); // Destroy the old chart instance before creating a new one
+        }
+        chartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Statistics',
+                    data: data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // Function to handle filter form submission
+    document.getElementById('filterForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+        var selectedRestaurant = document.getElementById('restaurant').value;
+        var filteredData = insightsData[selectedRestaurant] || insightsData['default']; // Use a default entry if no selection is made
+        var ctx = document.getElementById('statisticsChart').getContext('2d');
+        // Assuming your data structure has 'CO2_saved', 'carbon_footprint', 'energy_consumption', 'water_usage' keys
+        var labels = [
+  'CO2 Saved (kg)',       // Assuming kilograms for CO2 saved
+  'Carbon Footprint (kg)', // Assuming kilograms for carbon footprint
+  'Energy Consumption (kWh)', // Assuming kilowatt-hours for energy consumption
+  'Water Usage (L)'       // Assuming liters for water usage
+];
+        var data = [
+            filteredData.CO2_saved,
+            filteredData.carbon_footprint,
+            filteredData.energy_consuption,
+            filteredData.water_usage
+        ];
+        generateBarChart(ctx, data, labels);
+    });
+
+    // Initial chart generation when the page loads
+    var ctx = document.getElementById('statisticsChart').getContext('2d');
+    // Provide initial data and labels for the chart
+    generateBarChart(ctx, [], []);
+
+    </script>
+</body>
+</html>

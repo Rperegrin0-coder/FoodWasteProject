@@ -7,6 +7,7 @@ from google.auth.transport import requests
 from flask_session import Session
 import requests
 from firebase_admin import storage
+from datetime import datetime
 
 
 # Initialize Flask app
@@ -30,6 +31,15 @@ default_app = firebase_admin.initialize_app(cred, {
 })
 
 WEB_API_KEY = 'AIzaSyD0PGTaZiC3zJ4VeucasJ7NuSti9zNsLds'
+
+
+
+# Define the custom filter function
+def to_iso_string(value):
+    """Convert a datetime object to ISO format string."""
+    return value.isoformat() if isinstance(value, datetime) else value
+
+app.jinja_env.filters['to_iso_string'] = to_iso_string
 
 
 # Function to upload image and get URL
@@ -382,6 +392,38 @@ def make_reservation():
             # Debugging: Print user not logged in message
             print("User not logged in")
             return "User not logged in", 401
+
+
+@app.route('/insights', methods=['GET', 'POST'])
+def insights():
+    try:
+        # Query the Firebase Realtime Database for the insights data
+        ref = db.reference('/insights')
+        insights_data = ref.get()
+
+        # Debugging: Print insights_data to the console
+        print('Insights Data:', insights_data)
+
+        if request.method == 'POST':
+            # Process the posted form data and possibly filter insights_data
+            selected_restaurant = request.form.get('restaurant')
+            print('Selected Restaurant:', selected_restaurant)
+
+            if selected_restaurant:
+                # Filter the insights_data based on the selected restaurant
+                insights_data = {key: value for key, value in insights_data.items()
+                                 if value['restaurant_name'] == selected_restaurant}
+
+            # Debugging: Print the filtered insights data to the console
+            print('Filtered Insights Data:', insights_data)
+
+        # Pass the insights data to the HTML template
+        return render_template('insights.html', insights_data=insights_data)
+    except Exception as e:
+        # If any exceptions occur, print the stack trace to the console
+
+        # Optionally, return a custom error message or template
+        return jsonify({'error': 'An error occurred while processing insights data'}), 500
 
 
 if __name__ == '__main__':
