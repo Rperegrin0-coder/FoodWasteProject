@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='insights.css') }}">
     <title>Insights</title>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    {% include 'navbar.html' %}
+{% include 'navbar.html' %}
     <h1>Insights</h1>
-
-    <!-- Filter form for selecting restaurant/retailer -->
     <form id="filterForm" method="POST">
         <label for="restaurant">Select Restaurant/Retailer:</label>
         <select id="restaurant" name="restaurant">
@@ -29,6 +28,26 @@
     <div>
         <canvas id="statisticsChart" width="800" height="400"></canvas>
     </div>
+
+<!-- Side view panel for account actions -->
+<div id="sideViewPanel" class="side-view-panel">
+    <!-- Dynamic content based on user sign-in state -->
+    {% if session['user_email'] %}
+    <a href="javascript:void(0)" class="closebtn" onclick="closeSideView()">&times;</a>
+    <div class="user-info">
+        <p class="user-email">{{ session['user_email'] }}</p>
+        <a href="/favorites" class="side-panel-link">Favorites</a> <!-- Link to Favorites -->
+        <a href="/profile" class="side-panel-link">Profile</a> <!-- Add Profile link -->
+        <a href="/logout" class="logout-link">Logout</a>
+    </div>
+    {% else %}
+    <a href="javascript:void(0)" class="closebtn" onclick="closeSideView()">&times;</a>
+    <a href="/signin">Sign In</a>
+    <a href="/register">Register</a>
+    {% endif %}
+</div>
+
+
 
     <script>
     var chartInstance = null; // This will hold our chart instance
@@ -91,5 +110,13 @@
     generateBarChart(ctx, [], []);
 
     </script>
+
+
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 </html>

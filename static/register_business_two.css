@@ -1,0 +1,97 @@
+/* Main Styles for the Business Registration Page */
+body {
+    background-color: #f8f9fa; /* Light grey background for better contrast */
+    color: #333; /* Dark grey text for readability */
+    font-family: 'Arial', sans-serif; /* Clean and professional font */
+}
+
+.container {
+    max-width: 800px; /* Limit container width for better form structure */
+    background: #fff; /* White background for the form area */
+    padding: 20px; /* Padding around the content */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    margin-top: 40px; /* Margin top for spacing from the navbar */
+    border: 1px solid #dee2e6; /* Light border for definition */
+}
+
+h1, p.lead {
+    color: #004d40; /* Deep green for titles to align with GreenGrain theme */
+}
+
+/* Form styling */
+.form-group label {
+    color: #005f5d; /* Slightly darker green for better readability */
+    font-weight: bold; /* Bold labels */
+}
+
+.form-control {
+    border-radius: 4px; /* Slightly rounded borders for inputs */
+    border: 1px solid #ced4da; /* Standard bootstrap border color for form controls */
+}
+
+.form-control:focus {
+    border-color: #80cbc4; /* Teal border on focus for a pop of color */
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(128, 203, 196, 0.6); /* Glow effect for focus */
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #00796b; /* Teal background for primary buttons */
+    border-color: #00796b; /* Matching border color */
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #004d40; /* Darker green on hover/focus */
+    border-color: #004d40; /* Darker border on hover/focus */
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .container {
+        padding: 15px; /* Less padding on smaller screens */
+        margin-top: 20px; /* Less margin on top */
+    }
+}
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    padding: 15px 0;
+    background-color: #004d40;
+    color: white;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+footer p {
+    margin-bottom: 0;
+}
+
+/* Navigation Bar */
+.navbar {
+    background-color: #004d40; /* A deeper shade for a more professional appearance */
+    border-bottom: 3px solid #00251a; /* A subtle border to enhance the navbar */
+
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .nav-link {
+    color: #ffffff;
+    transition: color 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.navbar-dark .navbar-brand:hover,
+.navbar-dark .nav-link:hover {
+    color: #adebad; /* A lighter green for hover states */
+}
+.btn-custom {
+    background-color: #4CAF50; /* Green button for actions that match the sustainability theme */
+    color: #ffffff; /* White text for better visibility */
+    border: none;
+}
+.btn-custom:hover {
+    background-color: #388E3C; /* Darker green on hover for interaction feedback */
+}

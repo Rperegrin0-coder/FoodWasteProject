@@ -14,9 +14,15 @@
     <h1>From Excess to Access</h1>
     <p>Bridging the Gap with Every Meal!</p>
     <form id="search-form" action="/discounts" method="GET">
-      <input type="text" id="search-input" name="postcode" placeholder="Enter your postcode e.g. NG75AD" aria-label="Search">
-      <button type="submit" class="btn btn-primary">Search</button>
+    <!-- Update the input element with an id for easier selection -->
+    <input type="text" id="search-input" name="postcode" placeholder="Enter your postcode or address" aria-label="Search">
+
+    <!-- Add a container to display autocomplete suggestions -->
+    <div id="autocomplete-suggestions"></div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
     </form>
+
   </div>
 </header>
 
@@ -29,6 +35,7 @@
     <div class="user-info">
         <p class="user-email">{{ session['user_email'] }}</p>
         <a href="/favorites" class="side-panel-link">Favorites</a> <!-- Link to Favorites -->
+        <a href="/discounts" class="side-panel-link">Discounts</a>
         <a href="/profile" class="side-panel-link">Profile</a> <!-- Add Profile link -->
         <a href="/logout" class="logout-link">Logout</a>
     </div>
@@ -40,9 +47,66 @@
 </div>
 
 
+<script>
+// Initialize Google Places Autocomplete
+// Function to initialize autocomplete using Algolia Places API
+function initAutocomplete() {
+    var input = document.getElementById('search-input');
+    var autocomplete = new google.maps.places.Autocomplete(input);
 
+    // Add event listener for when a place is selected
+    autocomplete.addListener('place_changed', function() {
+        var place = autocomplete.getPlace();
+        console.log('Selected Place:', place); // Debug print
+        // You can further process the selected place if needed
+    });
 
+    // Add event listener for input changes to fetch autocomplete suggestions
+    input.addEventListener('input', function() {
+        var searchText = input.value.trim();
+        if (searchText.length > 0) {
+            fetchAutocompleteSuggestions(searchText);
+        }
+    });
+}
 
+// Function to fetch autocomplete suggestions from the server
+function fetchAutocompleteSuggestions(searchText) {
+    $.ajax({
+        url: "/autocomplete",
+        type: "GET",
+        data: { input: searchText },
+        success: function(data) {
+            console.log("Autocomplete Suggestions:", data);
+            // Update UI to display autocomplete suggestions (if any)
+            updateAutocompleteSuggestions(data);
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching autocomplete suggestions:", error);
+        }
+    });
+}
+
+// Function to update autocomplete suggestions in the UI
+function updateAutocompleteSuggestions(suggestions) {
+    // Clear previous suggestions
+    var autocompleteList = document.getElementById('autocomplete-list');
+    autocompleteList.innerHTML = '';
+
+    // Add new suggestions to the list
+    suggestions.forEach(function(suggestion) {
+        var suggestionItem = document.createElement('li');
+        suggestionItem.textContent = suggestion;
+        autocompleteList.appendChild(suggestionItem);
+    });
+}
+
+// Call initAutocomplete when the page loads or refreshes
+$(document).ready(function() {
+    initAutocomplete();
+});
+
+</script>
 
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

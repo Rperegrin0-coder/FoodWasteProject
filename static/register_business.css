@@ -159,3 +159,22 @@ body, html {
 .side-view-panel .profile-link:last-child { /* Apply last-child styling */
     margin-bottom: 10px; /* Add some space below the last link */
 }
+
+
+/* Dropdown menu */
+.dropdown-menu {
+    background-color: #004d40; /* Background color for the dropdown menu */
+}
+
+.dropdown-menu .dropdown-item {
+    color: #ffffff; /* Text color for dropdown items */
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #00251a; /* Darker background color on hover */
+}
+
+.navbar-dark .dropdown-menu .dropdown-item:focus,
+.navbar-dark .dropdown-menu .dropdown-item.active {
+    background-color: #00251a; /* Darker background color when item is focused or active */
+}

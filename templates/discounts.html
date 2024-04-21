@@ -21,6 +21,7 @@
     <div class="user-info">
         <p class="user-email">{{ session['user_email'] }}</p>
         <a href="/favorites" class="side-panel-link">Favorites</a>
+        <a href="/discounts" class="side-panel-link">Discounts</a>
         <a href="/profile" class="side-panel-link">Profile</a> <!-- Add Profile link -->
         <a href="/logout" class="logout-link">Logout</a>
         <!-- Link to Favorites -->
@@ -286,8 +287,7 @@
       // Example: map.setCenter({lat: -34.397, lng: 150.644});
     }
  <!-- JavaScript to handle adding to favorites -->
-
-    function addToFavorites(listingId) {
+function addToFavorites(listingId) {
     console.log("Adding to favorites:", listingId);
 
     // Get the current user's ID
@@ -326,19 +326,97 @@
     });
 }
 
-function toggleFavorite(element) {
-    // Check if the class list contains 'fa-heart-o' to determine if it's not favorited
+function toggleFavorite(element, listingId) {
+    // Toggle the visual appearance of the favorite icon
     if (element.querySelector('i').classList.contains('fa-heart-o')) {
-        // It's not favorited, add the 'fa-heart' class and remove the 'fa-heart-o' class
         element.querySelector('i').classList.add('fa-heart');
         element.querySelector('i').classList.remove('fa-heart-o');
     } else {
-        // It's already favorited, remove the 'fa-heart' class and add the 'fa-heart-o' class
         element.querySelector('i').classList.add('fa-heart-o');
         element.querySelector('i').classList.remove('fa-heart');
     }
-    // Here you would also add your code to handle the server-side logic, e.g., AJAX request
-    }
+
+    // Make an AJAX request to the Flask backend to toggle the favorite status
+    $.ajax({
+        url: '/toggle_favorite/' + listingId,
+        type: 'POST',
+        success: function(response) {
+            // Optionally, update the UI further based on the response
+            console.log('Favorite status toggled successfully');
+        },
+        error: function(xhr, status, error) {
+            console.error('Error toggling favorite:', error);
+            // Optionally, revert the UI changes if there's an error
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Fetch user favorites when the page loads
+    fetchUserFavorites();
+
+    // Sorting listener
+    document.getElementById('sortFilter').addEventListener('change', function() {
+        var selectedOption = this.value;
+        var listings = Array.from(document.querySelectorAll('.listing-item'));
+
+        // Sort based on the selected option
+        sortListings(listings, selectedOption);
+
+        // Reorder the DOM
+        reorderListingsInDOM(listings);
+    });
+});
+
+// Function to fetch user favorites from the server
+// Function to fetch user favorites from the server
+function fetchUserFavorites() {
+    $.ajax({
+        url: "/fetch_user_favorites",
+        type: "GET",
+        success: function(data) {
+            var favorites = data.favorites;
+            console.log("User favorites:", favorites);
+
+            // Update UI to reflect user favorites
+            updateFavoriteIconsUI(favorites);
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching user favorites:", error);
+        }
+    });
+}
+
+function updateFavoriteIconsUI(favorites) {
+    console.log("Favorites:", favorites); // Check favorites array
+
+    var listingItems = document.querySelectorAll('.listing-item');
+
+    listingItems.forEach(function(listing) {
+        var listingId = listing.getAttribute('data-listing-id').toString(); // Ensure listingId is a string
+        console.log("Listing ID:", listingId); // Check listingId for each listing
+
+        // Check if the current listing is among the user's favorites
+        if (favorites && favorites.includes(listingId)) {
+            // If the listing is a favorite, display the heart filled in
+            listing.querySelector('i').classList.add('fa-heart');
+            listing.querySelector('i').classList.remove('fa-heart-o');
+        } else {
+            // If the listing is not a favorite, display the heart outline
+            listing.querySelector('i').classList.add('fa-heart-o');
+            listing.querySelector('i').classList.remove('fa-heart');
+        }
+    });
+}
+
+
+
+// Call fetchUserFavorites when the page loads or refreshes
+$(document).ready(function() {
+    fetchUserFavorites();
+});
+
+
  document.addEventListener("DOMContentLoaded", function() {
     // Sorting listener
     document.getElementById('sortFilter').addEventListener('change', function() {
@@ -427,4 +505,3 @@ function filterByRating() {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-

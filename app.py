@@ -1,5 +1,5 @@
 import json
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 import firebase_admin
 from firebase_admin import credentials, db, auth
 import logging
@@ -189,21 +189,19 @@ def signin():
         headers = {"Content-Type": "application/json"}
         data = json.dumps({"email": email, "password": password, "returnSecureToken": True})
 
-        # Correctly use the requests.post method
         response = requests.post(url, headers=headers, data=data)
 
         if response.ok:
             user_data = response.json()
             session['user_email'] = email
             session['user_id'] = user_data['localId']
-            # Redirect to home page or wherever you like
             return redirect(url_for('home'))
         else:
-            # Extract error message
             error_message = response.json()['error']['message']
-            return f"Sign in failed: {error_message}", 400
+            # Log for debugging
+            app.logger.debug(f"Sign in failed with status code {response.status_code}: {error_message}")
+            return f"Sign in failed: {error_message}", response.status_code  # Return the actual status code from Firebase
 
-    # Render the sign-in page if method is GET or authentication fails
     return render_template('signin.html')
 
 
@@ -289,10 +287,11 @@ def favorites():
         print("User not logged in, redirecting to login.")
         return redirect(url_for('login'))
 
-app.route('/toggle_favorite/<listing_id>', methods=['POST'])
+
 @app.route('/toggle_favorite/<listing_id>', methods=['POST'])
 def toggle_favorite(listing_id):
     user_id = session.get('user_id')
+    print("User ID:", user_id)  # Debug print
 
     if user_id:
         try:
@@ -300,8 +299,10 @@ def toggle_favorite(listing_id):
             if result is None:
                 return jsonify({'error': 'Failed to toggle favorite'}), 500
 
+            print("Favorite Toggled Successfully")  # Debug print
             return jsonify({'isFavorite': result}), 200
         except Exception as e:
+            print("Error:", str(e))  # Debug print
             return jsonify({'error': str(e)}), 500
     else:
         return jsonify({'error': 'User not logged in'}), 401
@@ -310,11 +311,15 @@ def toggle_favorite(listing_id):
 
 def toggle_user_favorite(user_id, listing_id):
     try:
+        print("User ID:", user_id)  # Debug print
+
         # Reference to the user's favorites in the database
         ref = db.reference(f'users/{user_id}/favorites')
 
         # Get the current list of favorites for the user
         favorites = ref.get() or []
+
+        print("Current Favorites:", favorites)  # Debug print
 
         if listing_id in favorites:
             # If the listing is currently a favorite, remove it
@@ -327,12 +332,34 @@ def toggle_user_favorite(user_id, listing_id):
 
         # Update the database with the new list of favorites for the user
         ref.set(favorites)
+        print("Favorites Updated Successfully")  # Debug print
         return now_favorite
     except Exception as e:
         # Log the error or handle it as needed
         print(f"Error toggling favorite for user {user_id} and listing {listing_id}: {str(e)}")
         return None
 
+@app.route('/fetch_user_favorites', methods=['GET'])
+def fetch_user_favorites():
+    user_id = session.get('user_id')
+    print("User ID:", user_id)  # Debug print
+
+    if user_id:
+        try:
+            # Reference to the user's favorites in the database
+            ref = db.reference(f'users/{user_id}/favorites')
+
+            # Get the current list of favorites for the user
+            favorites = ref.get() or []
+            print("Favorites:", favorites)  # Debug print
+
+            return jsonify({'favorites': favorites}), 200
+        except Exception as e:
+            print("Error:", str(e))  # Debug print
+            return jsonify({'error': str(e)}), 500
+    else:
+        print("User not logged in")  # Debug print
+        return jsonify({'error': 'User not logged in'}), 401
 
 @app.route('/profile')
 def profile():
@@ -424,6 +451,107 @@ def insights():
 
         # Optionally, return a custom error message or template
         return jsonify({'error': 'An error occurred while processing insights data'}), 500
+
+@app.route('/sustainability')
+def sustainability():
+    return render_template('about.html')
+
+@app.route('/submit_business_registration', methods=['GET', 'POST'])
+def register_business_two():
+    if request.method == 'POST':
+        # Extract data from form
+        business_name = request.form.get('businessName')
+        business_type = request.form.get('businessType')
+        address = request.form.get('address')
+        email = request.form.get('email')
+        phone = request.form.get('phone')
+        description = request.form.get('description')
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        # Here, you should add the code to store this data in your database
+        # For example, saving data to a SQL database or sending to an API
+
+        # After storing data, you might want to send a confirmation email or log the registration
+
+        flash('Business registered successfully!')
+        return redirect(url_for('home'))  # Redirect to the homepage or a confirmation page
+    else:
+        # Render the form to register a business
+        return render_template('register_business_two.html')
+
+
+# Algolia Places API endpoint
+ALGOLIA_PLACES_ENDPOINT = "https://places-dsn.algolia.net/1/places/query"
+
+# Algolia Places API key
+ALGOLIA_API_KEY = "YOUR_ALGOLIA_API_KEY_HERE"
+
+@app.route('/autocomplete', methods=['GET'])
+def autocomplete():
+    input_text = request.args.get('input')  # Get the text input from the request
+    print("Input Text:", input_text)  # Debug print
+
+    # Make a request to the Algolia Places API
+    headers = {
+        "X-Algolia-API-Key": "e9ba53f8430b291ffb3e3674406349a6",
+        "X-Algolia-Application-Id": "plY1TL7FHP8X"
+    }
+    params = {
+        'query': input_text,
+        'type': 'address',
+        'countries': ['uk']  # Optionally, specify the countries to restrict the search
+    }
+
+    response = requests.post(ALGOLIA_PLACES_ENDPOINT, headers=headers, json=params)
+    print("API Request URL:", response.url)  # Debug print
+
+    data = response.json()
+    print("API Response:", data)  # Debug print
+
+    # Extract the suggestions from the response and return them
+    if 'hits' in data:
+        suggestions = [hit['locale_names'][0] for hit in data['hits']]
+        print("Suggestions:", suggestions)  # Debug print
+        return jsonify(suggestions)
+    else:
+        print("No suggestions found.")  # Debug print
+        return jsonify([])  # Return an empty list if no suggestions are found
+
+
+# Route for serving the charity registration form
+@app.route('/register_charity', methods=['GET'])
+def register_charity():
+    return render_template('charity.html')
+
+# Route for submitting the charity registration form
+@app.route('/submit_charity_registration', methods=['POST'])
+def submit_charity_registration():
+    # Retrieve form data
+    business_name = request.form.get('businessName')
+    business_type = request.form.get('businessType')
+    address = request.form.get('address')
+    email = request.form.get('email')
+    phone = request.form.get('phone')
+    description = request.form.get('description')
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    # Store the data in Firebase Realtime Database
+    ref = db.reference('charity_registrations')  # Reference to the 'charity_registrations' node
+    new_registration_ref = ref.push()  # Generate a new unique key for the registration
+    new_registration_ref.set({
+        'business_name': business_name,
+        'business_type': business_type,
+        'address': address,
+        'email': email,
+        'phone': phone,
+        'description': description,
+        'username': username,
+        'password': password
+    })
+
+    return "Charity registration submitted successfully!"
 
 
 if __name__ == '__main__':

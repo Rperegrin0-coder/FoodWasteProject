@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sustainability Initiative</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='about.css') }}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <header class="bg-light text-center py-5">
+        <h1 class="display-4">Promoting Sustainability</h1>
+        <p class="lead">Join us in our effort to reduce food waste and make a positive impact on our environment.</p>
+    </header>
+
+    <section class="container mt-5">
+        <h2 class="mb-4 text-center">Why Sustainability Matters</h2>
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <img src="{{ url_for('static', filename='waste.png') }}" alt="Reducing food waste" class="img-fluid rounded">
+            </div>
+            <div class="col-lg-6">
+                <p>Sustainability is crucial for maintaining the balance of our ecosystem. By reducing food waste, we not only conserve resources but also minimize our carbon footprint. Learn how every small step can lead to a greener planet.</p>
+            </div>
+        </div>
+    </section>
+
+   <section class="container-fluid bg-dark text-white py-5">
+    <div class="container text-center">
+        <h2 class="mb-4" style="color: #76b852;">How You Can Help</h2>
+        <p>Discover simple everyday actions you can take to reduce food waste. From smarter shopping to creative cooking, get inspired to make changes that count.</p>
+        <!-- Local video for sustainability practices -->
+        <div class="embed-responsive embed-responsive-16by9 my-4">
+            <video class="embed-responsive-item" controls poster="{{ url_for('static', filename='coverpic.png') }}">
+                <source src="{{ url_for('static', filename='food_waste.mp4') }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+
+        </div>
+    </div>
+</section>
+
+
+    <section class="container mt-5">
+        <h2 class="mb-4 text-center">Our Community Impact</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ url_for('static', filename='garden.jpg') }}" class="card-img-top" alt="Community garden">
+                    <div class="card-body">
+                        <h5 class="card-title">Community Gardens</h5>
+                        <p class="card-text">We support local community gardens that use compost from donated food scraps, promoting urban farming and education.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ url_for('static', filename='food_donate.jpg') }}" class="card-img-top" alt="Sustainable farming">
+                    <div class="card-body">
+                        <h5 class="card-title">Food Redistribution</h5>
+                        <p class="card-text">Our network actively redistributes excess food to local churches and charities, helping to nourish the community while reducing waste. This initiative not only supports those in need but also promotes environmental sustainability by ensuring that surplus produce serves a meaningful purpose.</p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ url_for('static', filename='educational_workshop.jpg') }}" class="card-img-top" alt="Educational workshops">
+                    <div class="card-body">
+                        <h5 class="card-title">Educational Workshops</h5>
+                        <p class="card-text">Through workshops and seminars, we educate the community on the importance of reducing food waste and recycling.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-light text-center py-3">
+        <p>&copy; {{ current_year }} GreenGrain. All rights reserved.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

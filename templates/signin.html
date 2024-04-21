@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='signin.css') }}">
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="/">GreenGrain</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- Navbar content -->
+</nav>
     <div class="container mt-5">
         <h2>Sign In</h2>
         <form action="/signin" method="post">

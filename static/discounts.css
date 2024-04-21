@@ -31,6 +31,25 @@ body {
     background-color: #388E3C; /* Darker green on hover for interaction feedback */
 }
 
+/* Dropdown menu */
+.dropdown-menu {
+    background-color: #004d40; /* Background color for the dropdown menu */
+}
+
+.dropdown-menu .dropdown-item {
+    color: #ffffff; /* Text color for dropdown items */
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #00251a; /* Darker background color on hover */
+}
+
+.navbar-dark .dropdown-menu .dropdown-item:focus,
+.navbar-dark .dropdown-menu .dropdown-item.active {
+    background-color: #00251a; /* Darker background color when item is focused or active */
+}
+
+
 /* Side view panel styles */
 .side-view-panel {
     height: 100%;
