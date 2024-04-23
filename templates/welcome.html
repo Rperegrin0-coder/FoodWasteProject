@@ -48,8 +48,7 @@
 
 
 <script>
-// Initialize Google Places Autocomplete
-// Function to initialize autocomplete using Algolia Places API
+// Initialize Google Places Autocomplete using Algolia Places API
 function initAutocomplete() {
     var input = document.getElementById('search-input');
     var autocomplete = new google.maps.places.Autocomplete(input);
@@ -58,19 +57,37 @@ function initAutocomplete() {
     autocomplete.addListener('place_changed', function() {
         var place = autocomplete.getPlace();
         console.log('Selected Place:', place); // Debug print
-        // You can further process the selected place if needed
+        // Further process the selected place if needed
     });
 
-    // Add event listener for input changes to fetch autocomplete suggestions
-    input.addEventListener('input', function() {
-        var searchText = input.value.trim();
-        if (searchText.length > 0) {
-            fetchAutocompleteSuggestions(searchText);
-        }
+    // Request user's location and populate search bar when page loads
+    navigator.geolocation.getCurrentPosition(function(position) {
+        var geocoder = new google.maps.Geocoder();
+        var latlng = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+        };
+
+        geocoder.geocode({
+            'location': latlng
+        }, function(results, status) {
+            if (status === 'OK') {
+                if (results[0]) {
+                    var address = results[0].formatted_address;
+                    input.value = address;
+                } else {
+                    console.log('No results found');
+                }
+            } else {
+                console.log('Geocoder failed due to: ' + status);
+            }
+        });
+    }, function() {
+        console.log('Geolocation request failed.');
     });
 }
 
-// Function to fetch autocomplete suggestions from the server
+// Fetch autocomplete suggestions from the server
 function fetchAutocompleteSuggestions(searchText) {
     $.ajax({
         url: "/autocomplete",
@@ -87,11 +104,10 @@ function fetchAutocompleteSuggestions(searchText) {
     });
 }
 
-// Function to update autocomplete suggestions in the UI
+// Update autocomplete suggestions in the UI
 function updateAutocompleteSuggestions(suggestions) {
-    // Clear previous suggestions
     var autocompleteList = document.getElementById('autocomplete-list');
-    autocompleteList.innerHTML = '';
+    autocompleteList.innerHTML = ''; // Clear previous suggestions
 
     // Add new suggestions to the list
     suggestions.forEach(function(suggestion) {

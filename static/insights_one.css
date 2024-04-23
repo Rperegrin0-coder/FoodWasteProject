@@ -1,0 +1,144 @@
+
+/* Dropdown menu */
+.dropdown-menu {
+    background-color: #004d40; /* Background color for the dropdown menu */
+}
+
+.dropdown-menu .dropdown-item {
+    color: #ffffff; /* Text color for dropdown items */
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #00251a; /* Darker background color on hover */
+}
+
+.navbar-dark .dropdown-menu .dropdown-item:focus,
+.navbar-dark .dropdown-menu .dropdown-item.active {
+    background-color: #00251a; /* Darker background color when item is focused or active */
+}
+
+
+/* Navigation Bar */
+.navbar {
+    background-color: #004d40; /* A deeper shade for a more professional appearance */
+    border-bottom: 3px solid #00251a; /* A subtle border to enhance the navbar */
+
+}
+
+.navbar-dark .navbar-brand,
+.navbar-dark .nav-link {
+    color: #ffffff;
+    transition: color 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.navbar-dark .navbar-brand:hover,
+.navbar-dark .nav-link:hover {
+    color: #adebad; /* A lighter green for hover states */
+}
+.btn-custom {
+    background-color: #4CAF50; /* Green button for actions that match the sustainability theme */
+    color: #ffffff; /* White text for better visibility */
+    border: none;
+}
+.btn-custom:hover {
+    background-color: #388E3C; /* Darker green on hover for interaction feedback */
+}
+
+/* The side panel (hidden by default) */
+.side-view-panel {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #D4EDDA; /* Soft, earthy green */
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+/* The close button */
+.side-view-panel .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    color: #155724; /* Dark green for better visibility */
+}
+
+.side-view-panel a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #155724; /* Dark green for text */
+    display: block;
+    transition: 0.3s;
+}
+
+.side-view-panel a:hover {
+    color: #81C784; /* Lighter, vibrant green for hover */
+}
+
+.side-view-panel .user-info {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* Adds a subtle line below the user info */
+}
+
+.side-view-panel .user-email {
+    font-size: 16px; /* Decrease font size for better alignment */
+    font-weight: bold;
+    color: #004d40; /* Adjust color to fit your theme */
+    margin-bottom: 10px; /* Reduce margin for better spacing */
+}
+
+.side-view-panel .side-panel-link,
+.side-view-panel .logout-link,
+.side-view-panel .profile-link { /* Add styling for profile link */
+    font-size: 14px; /* Decrease font size for better alignment */
+    color: #155724; /* Adjust color to fit your theme */
+    text-decoration: none;
+    padding: 5px 10px;
+    border: 1px solid transparent; /* Remove border to simplify design */
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    display: block;
+    margin: 5px auto; /* Center links horizontally */
+    max-width: 150px; /* Limit width to avoid stretching */
+}
+
+.side-view-panel .side-panel-link:hover,
+.side-view-panel .logout-link:hover,
+.side-view-panel .profile-link:hover { /* Add hover effect for profile link */
+    background-color: #81C784; /* Change background color on hover */
+    color: #fff; /* Change text color on hover */
+}
+
+.side-view-panel .side-panel-link:last-child,
+.side-view-panel .logout-link:last-child,
+.side-view-panel .profile-link:last-child { /* Apply last-child styling */
+    margin-bottom: 10px; /* Add some space below the last link */
+}
+
+/* Custom CSS for Insights Login Page */
+.login-form {
+    max-width: 350px; /* Set maximum width for the login form */
+    margin: auto; /* Center the form horizontally */
+}
+
+.form-control {
+    font-size: 0.9rem; /* Reduce font size for form controls */
+    border-radius: 0.25rem; /* Add slight border radius for form controls */
+    box-shadow: none; /* Remove box shadow for form controls */
+}
+
+.btn-primary {
+    font-size: 0.9rem; /* Reduce font size for button */
+    border-radius: 0.25rem; /* Add slight border radius for button */
+}
+
+body, html {
+    background-color: #dddddd;
+}

@@ -420,7 +420,6 @@ def make_reservation():
             print("User not logged in")
             return "User not logged in", 401
 
-
 @app.route('/insights', methods=['GET', 'POST'])
 def insights():
     try:
@@ -451,6 +450,28 @@ def insights():
 
         # Optionally, return a custom error message or template
         return jsonify({'error': 'An error occurred while processing insights data'}), 500
+
+@app.route('/insights_login', methods=['GET', 'POST'])
+def insights_login():
+    if request.method == 'POST':
+        user_id = request.form['user_id']
+        password = request.form['password']
+
+        # Dummy user ID and password for testing
+        dummy_user_id = '1234'
+        dummy_password = '4321'
+
+        if user_id == dummy_user_id and password == dummy_password:
+            # Redirect to the insights page upon successful login
+            flash('Login successful!', 'success')
+            return redirect(url_for('insights'))
+        else:
+            # Display an error message for invalid credentials
+            flash('Invalid user ID or password. Please try again.', 'error')
+
+    # Render the login form template
+    return render_template('inisghts_one.html')
+
 
 @app.route('/sustainability')
 def sustainability():
@@ -489,7 +510,7 @@ ALGOLIA_API_KEY = "YOUR_ALGOLIA_API_KEY_HERE"
 
 @app.route('/autocomplete', methods=['GET'])
 def autocomplete():
-    input_text = request.args.get('input')  # Get the text input from the request
+    input_text = request.args.get('postcode')  # Get the text input from the request
     print("Input Text:", input_text)  # Debug print
 
     # Make a request to the Algolia Places API
@@ -503,7 +524,7 @@ def autocomplete():
         'countries': ['uk']  # Optionally, specify the countries to restrict the search
     }
 
-    response = requests.post(ALGOLIA_PLACES_ENDPOINT, headers=headers, json=params)
+    response = requests.get(ALGOLIA_PLACES_ENDPOINT, headers=headers, params=params)
     print("API Request URL:", response.url)  # Debug print
 
     data = response.json()
