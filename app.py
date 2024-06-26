@@ -4,6 +4,8 @@ import firebase_admin
 from firebase_admin import credentials, db, auth
 import logging
 from google.auth.transport import requests
+from google.oauth2 import service_account
+
 from flask_session import Session
 import requests
 from firebase_admin import storage
@@ -40,6 +42,9 @@ WEB_API_KEY = os.getenv('WEB_API_KEY')
 if WEB_API_KEY is None:
     raise ValueError("WEB_API_KEY not found in environment variables")
 
+
+credentials_path = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+credentials = service_account.Credentials.from_service_account_file(credentials_path)
 
 # Define the custom filter function
 def to_iso_string(value):
@@ -506,8 +511,8 @@ def register_business_two():
 # Algolia Places API endpoint
 ALGOLIA_PLACES_ENDPOINT = "https://places-dsn.algolia.net/1/places/query"
 
-# Algolia Places API key
-ALGOLIA_API_KEY = "YOUR_ALGOLIA_API_KEY_HERE"
+
+
 
 @app.route('/autocomplete', methods=['GET'])
 def autocomplete():
