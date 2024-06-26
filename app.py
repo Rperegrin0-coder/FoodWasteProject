@@ -8,6 +8,8 @@ from flask_session import Session
 import requests
 from firebase_admin import storage
 from datetime import datetime
+import os
+from dotenv import load_dotenv
 
 
 # Initialize Flask app
@@ -30,8 +32,13 @@ default_app = firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://finalyearproject-bf7bf-default-rtdb.firebaseio.com/'
 })
 
-WEB_API_KEY = 'AIzaSyD0PGTaZiC3zJ4VeucasJ7NuSti9zNsLds'
 
+
+load_dotenv()  # Load environment variables from .env file
+
+WEB_API_KEY = os.getenv('WEB_API_KEY')
+if WEB_API_KEY is None:
+    raise ValueError("WEB_API_KEY not found in environment variables")
 
 
 # Define the custom filter function
@@ -76,12 +83,6 @@ def add_listings_to_realtime_db(listings_data):
     logging.debug("Finished adding listings to Realtime Database.")
 
 
-"""""
-@app.route('/add-listings')
-def add_listings_route():
-    add_listings_to_realtime_db(listings)
-    return "Listings added to Realtime Database", 200
-"""
 
 
 @app.route('/')

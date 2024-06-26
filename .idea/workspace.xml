@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="86f87e90-4b3a-4afe-9752-c80641bee65d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/templates/inisghts_one.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flask_session/303d5728a0f12fd18e09a2c79744b9c4" beforeDir="false" afterPath="$PROJECT_DIR$/flask_session/303d5728a0f12fd18e09a2c79744b9c4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/inisghts_1.html" beforeDir="false" afterPath="$PROJECT_DIR$/static/insights_one.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/navbar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/discounts.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/discounts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/insights.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/insights.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,6 +226,9 @@
       <workItem from="1713267402528" duration="54494000" />
       <workItem from="1713642952524" duration="14000" />
       <workItem from="1713642985028" duration="18870000" />
+      <workItem from="1713711531378" duration="8450000" />
+      <workItem from="1719412669713" duration="892000" />
+      <workItem from="1719413571043" duration="589000" />
     </task>
     <servers />
   </component>
@@ -238,6 +240,6 @@
     <SUITE FILE_PATH="coverage/finalyearproject$new.coverage" NAME="new Coverage Results" MODIFIED="1713545528877" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/templates" />
     <SUITE FILE_PATH="coverage/finalyearproject$conftest.coverage" NAME="conftest Coverage Results" MODIFIED="1713558470871" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
     <SUITE FILE_PATH="coverage/finalyearproject$Flask__app_py_.coverage" NAME="Flask (app.py) Coverage Results" MODIFIED="1713642842630" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
-    <SUITE FILE_PATH="coverage/finalyearproject$finalyearproject.coverage" NAME="finalyearproject Coverage Results" MODIFIED="1713711483653" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/finalyearproject$finalyearproject.coverage" NAME="finalyearproject Coverage Results" MODIFIED="1719415904415" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
